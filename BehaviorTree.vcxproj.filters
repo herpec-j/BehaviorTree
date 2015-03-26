@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Details">
+      <UniqueIdentifier>{81653573-e6e5-4c5a-ab02-69534d277e68}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Includes\BehaviorTree\BehaviorTree.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\ConditionTest.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\FailurePolicy.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\FunctionCondition.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\PrioritySelector.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\ProbabilitySelector.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\RandomSelector.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\RootNode.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\SequenceSelector.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\Status.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\SuccessPolicy.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\LeafNode.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\ActionNode.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\ConditionNode.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\CompositeNode.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\DecoratorNode.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\IntegerCondition.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\DecimalCondition.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\BooleanCondition.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\ConcurrentSelector.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\RepeatDecorator.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\CountLimitDecorator.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\AlwaysRunningDecorator.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\AlwaysSuccessDecorator.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\AlwaysFailureDecorator.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\SuccessAfterDecorator.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\FailureAfterDecorator.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\RunningAfterDecorator.hpp">
+      <Filter>Header Files\Details</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Sources\Test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,107 @@
+#pragma once
+
+#include <cstddef>
+
+#include "Details/DecoratorNode.hpp"
+
+namespace AO
+{
+	namespace BehaviorTree
+	{
+		namespace Details
+		{
+			template < class Entity, typename... Args >
+			class RepeatDecorator final : public DecoratorNode<Entity, Args...>
+			{
+			private:
+				std::size_t target;
+				std::size_t count = 0;
+
+			public:
+				RepeatDecorator(std::size_t repeats)
+					: target(repeats)
+				{
+					return;
+				}
+
+				RepeatDecorator(const RepeatDecorator &other)
+					: DecoratorNode(other), target(other.target), count(other.count)
+				{
+					return;
+				}
+
+				RepeatDecorator(RepeatDecorator &&other)
+					: DecoratorNode(std::move(other)), target(other.target), count(other.count)
+				{
+					other.target = 0;
+					other.count = 0;
+				}
+
+				RepeatDecorator &operator=(const RepeatDecorator &other)
+				{
+					if (this != &other)
+					{
+						DecoratorNode::operator=(other);
+						target = other.target;
+						count = other.count;
+					}
+					return *this;
+				}
+
+				RepeatDecorator &operator=(RepeatDecorator &&other)
+				{
+					if (this != &other)
+					{
+						DecoratorNode::operator=(std::move(other));
+						target = other.target;
+						other.target = 0;
+						count = other.count;
+						other.count = 0;
+					}
+					return *this;
+				}
+
+				virtual ~RepeatDecorator(void) = default;
+
+			protected:
+				virtual void initialize(EntityPtr entity) override final
+				{
+					count = 0;
+					if (!children.empty())
+					{
+						children.front()->initialize(entity);
+					}
+				}
+
+				virtual Status filter(EntityPtr entity, Args... args) override final
+				{
+					if (children.empty())
+					{
+						return Status::Success;
+					}
+					else
+					{
+						const Status status = children.front()->execute(entity, args...);
+						if (status == Status::Success)
+						{
+							++count;
+							if (count == target)
+							{
+								initialize(entity);
+								return Status::Success;
+							}
+							else
+							{
+								return Status::Running;
+							}
+						}
+						else
+						{
+							return status;
+						}
+					}
+				}
+			};
+		}
+	}
+}
