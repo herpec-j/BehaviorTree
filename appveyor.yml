@@ -1,8 +1,10 @@
+branches:
+  only:
+    - master
 before_build:
   - mkdir Build
   - cd Build
-  - cmake ..
+  - cmake .. -G "Visual Studio 12"
 build:
-  - make
-  - make test
-  
+  project:
+    - RUN_TESTS.vcxproj
