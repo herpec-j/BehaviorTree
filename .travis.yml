@@ -14,7 +14,6 @@ install:
   - if test $CC = gcc; then sudo update-alternatives --config gcc; fi
   - if test $CC = gcc; then sudo update-alternatives --config g++; fi
 before_script:
-  - chmod +x ./ContinuousIntegration/Travis.sh
   - mkdir Build
   - cd Build
   - cmake ..
