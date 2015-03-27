@@ -70,14 +70,14 @@ namespace AO
 			using EntityPtr = EntityType *;
 
 			// Status
-			using Status = Status;
+			using Status = Details::Status;
 
 			// Policies
-			using FailurePolicy = FailurePolicy;
-			using SuccessPolicy = SuccessPolicy;
+			using FailurePolicy = Details::FailurePolicy;
+			using SuccessPolicy = Details::SuccessPolicy;
 
 			// Conditions
-			using ConditionTest = ConditionTest;
+			using ConditionTest = Details::ConditionTest;
 
 			// Base Nodes
 			using Action = typename Details::ActionNode < Entity, Args... > ;
@@ -159,10 +159,10 @@ namespace AO
 				return behavior->execute(owner, args...);
 			}
 
-			template <typename B, typename... Args>
-			void assignBehavior(Args &&...args)
+			template <typename B, typename... BehaviorArgs>
+			void assignBehavior(BehaviorArgs &&...args)
 			{
-				assignBehavior(std::make_shared<B>(std::forward<Args>(args)...));
+				assignBehavior(std::make_shared<B>(std::forward<BehaviorArgs>(args)...));
 			}
 
 			void assignBehavior(RootPtr newBehavior)

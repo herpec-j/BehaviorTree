@@ -66,7 +66,7 @@ namespace AO
 				virtual void initialize(EntityPtr entity) override final
 				{
 					currentNode.reset();
-					for (auto &child : children)
+					for (auto &child : this->children)
 					{
 						child->initialize(entity);
 					}
@@ -85,13 +85,13 @@ namespace AO
 					}
 					else
 					{
-						const std::size_t childrenNumber = children.size();
+						const std::size_t childrenNumber = this->children.size();
 						if (childrenNumber != 0)
 						{
 							static std::default_random_engine generator(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
 							std::uniform_int_distribution<std::size_t> distribution(0, childrenNumber - 1);
 							const std::size_t chosen = distribution(generator);
-							currentNode = children[chosen];
+							currentNode = this->children[chosen];
 							const Status status = currentNode->execute(entity, args...);
 							if (status != Status::Running)
 							{

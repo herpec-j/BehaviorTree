@@ -75,9 +75,9 @@ namespace AO
 				virtual void initialize(EntityPtr entity) override final
 				{
 					count = total;
-					if (!children.empty())
+					if (!this->children.empty())
 					{
-						children.front()->initialize(entity);
+						this->children.front()->initialize(entity);
 					}
 				}
 
@@ -85,12 +85,12 @@ namespace AO
 				{
 					if (count == 0)
 					{
-						if (!children.empty())
+						if (!this->children.empty())
 						{
-							const Status status = children.front()->execute(entity, args...);
+							const Status status = this->children.front()->execute(entity, args...);
 							if (status == Status::Success || status == Status::Failure)
 							{
-								children.front()->initialize(entity);
+								this->children.front()->initialize(entity);
 							}
 						}
 						return Status::Failure;
@@ -98,12 +98,12 @@ namespace AO
 					else
 					{
 						--count;
-						if (!children.empty())
+						if (!this->children.empty())
 						{
-							const Status status = children.front()->execute(entity, args...);
+							const Status status = this->children.front()->execute(entity, args...);
 							if (status == Status::Success || status == Status::Failure)
 							{
-								children.front()->initialize(entity);
+								this->children.front()->initialize(entity);
 							}
 							return status;
 						}

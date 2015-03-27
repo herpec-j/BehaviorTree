@@ -10,17 +10,17 @@ struct Agent : public AO::BehaviorTree::BehaviorTree < Agent, short >
 		return;
 	}
 
-	AO::BehaviorTree::Status returnSuccess(Agent *agent, short value) const
+	AO::BehaviorTree::Status returnSuccess(Agent *, short) const
 	{
 		return AO::BehaviorTree::Status::Success;
 	}
 
-	AO::BehaviorTree::Status returnFailure(Agent *agent, short value) const
+	AO::BehaviorTree::Status returnFailure(Agent *, short) const
 	{
 		return AO::BehaviorTree::Status::Failure;
 	}
 
-	AO::BehaviorTree::Status returnRunning(Agent *agent, short value) const
+	AO::BehaviorTree::Status returnRunning(Agent *, short) const
 	{
 		return AO::BehaviorTree::Status::Running;
 	}
@@ -550,7 +550,7 @@ static void testBehaviorTree(void)
 	std::cout << "Test BehaviorTree OK !" << std::endl;
 }
 
-int main(int argc, char *argv[])
+int main(int, char *[])
 {
 	testBehaviorTree();
 	return EXIT_SUCCESS;

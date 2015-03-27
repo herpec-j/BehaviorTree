@@ -29,20 +29,20 @@ namespace AO
 			protected:
 				virtual void initialize(EntityPtr entity) override final
 				{
-					if (!children.empty())
+					if (!this->children.empty())
 					{
-						children.front()->initialize(entity);
+						this->children.front()->initialize(entity);
 					}
 				}
 
 				virtual Status filter(EntityPtr entity, Args... args) override final
 				{
-					if (!children.empty())
+					if (!this->children.empty())
 					{
-						const Status status = children.front()->execute(entity, args...);
+						const Status status = this->children.front()->execute(entity, args...);
 						if (status == Status::Success || status == Status::Failure)
 						{
-							children.front()->initialize(entity);
+							this->children.front()->initialize(entity);
 						}
 					}
 					return Status::Running;

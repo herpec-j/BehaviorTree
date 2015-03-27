@@ -1,14 +1,12 @@
 NAME						= Test
 
-PROJECT_DIRECTORY				= .
-
 ID						= BehaviorTree::Test
 
 ifeq						($(X64), 1)
-ARCHITECTURE					= x64
+ARCHITECTURE					= X64
 ARCHITECTURE_OPTION				= -m64
 else
-ARCHITECTURE					= x86
+ARCHITECTURE					= X86
 ARCHITECTURE_OPTION				= -m32
 endif
 
@@ -18,16 +16,16 @@ else
 CONFIGURATION					= Release
 endif
 
-BINARY_DIRECTORY				= $(PROJECT_DIRECTORY)/$(CONFIGURATION)/linux/$(ARCHITECTURE)
+BINARY_DIRECTORY				= $(CONFIGURATION)/Linux/$(ARCHITECTURE)
 
 OBJECTS_DIRECTORY				= $(BINARY_DIRECTORY)/Objects
 DEPENDENCIES_DIRECTORY				= $(BINARY_DIRECTORY)/Dependencies
 
 EXECUTABLE_NAME					= $(BINARY_DIRECTORY)/$(NAME)
 
-SOURCES_DIRECTORY				= $(PROJECT_DIRECTORY)/Sources
-INCLUDES_DIRECTORY				= $(PROJECT_DIRECTORY)/Includes/BehaviorTree/
-LIBRARIES_DIRECTORY				= $(PROJECT_DIRECTORY)/ThirdParties
+SOURCES_DIRECTORY				= Sources
+INCLUDES_DIRECTORY				= Includes/BehaviorTree/
+LIBRARIES_DIRECTORY				= ThirdParties
 
 SOURCES_EXTENSION				= cpp
 OBJECTS_EXTENSION				= opp
@@ -96,7 +94,8 @@ clean:
 						@$(PRINTF) $(OK_MESSAGE)'[\033[31m$(ID)::Dependencies\033[0m] cleaned\n'
 
 fclean: 					clean
-						@$(RM) $(EXECUTABLE_NAME)
+						@$(RM) Debug
+						@$(RM) Release
 						@$(PRINTF) $(OK_MESSAGE)'[\033[31m$(ID)::Executable\033[0m] cleaned\n'
 
 re:						fclean all

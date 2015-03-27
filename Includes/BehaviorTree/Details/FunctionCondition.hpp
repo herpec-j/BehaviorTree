@@ -25,19 +25,19 @@ namespace AO
 				FunctionCondition(void) = delete;
 
 				FunctionCondition(const Function &function)
-					: ConditionNode(), function(function)
+					: ConditionNode<Entity, Args...>(), function(function)
 				{
 					assert(function && "Invalid function");
 				}
 
 				FunctionCondition(const FunctionCondition &other)
-					: ConditionNode(other), function(other.function)
+					: ConditionNode<Entity, Args...>(other), function(other.function)
 				{
 					return;
 				}
 
 				FunctionCondition(FunctionCondition &&other)
-					: ConditionNode(std::move(other)), function(std::move(other.function))
+					: ConditionNode<Entity, Args...>(std::move(other)), function(std::move(other.function))
 				{
 					return;
 				}
@@ -46,7 +46,7 @@ namespace AO
 				{
 					if (this != &other)
 					{
-						ConditionNode::operator=(other);
+						ConditionNode<Entity, Args...>::operator=(other);
 						function = other.function;
 					}
 					return *this;
@@ -56,7 +56,7 @@ namespace AO
 				{
 					if (this != &other)
 					{
-						ConditionNode::operator=(std::move(other));
+						ConditionNode<Entity, Args...>::operator=(std::move(other));
 						function = std::move(other.function);
 					}
 					return *this;

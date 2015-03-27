@@ -81,9 +81,9 @@ namespace AO
 					{
 						currentRepetition = 0;
 					}
-					if (!children.empty())
+					if (!this->children.empty())
 					{
-						children.front()->initialize(entity);
+						this->children.front()->initialize(entity);
 					}
 				}
 
@@ -93,20 +93,20 @@ namespace AO
 					{
 						return Status::Failure;
 					}
-					else if (children.empty())
+					else if (this->children.empty())
 					{
 						++currentRepetition;
 						return Status::Success;
 					}
 					else
 					{
-						const Status status = children.front()->execute(entity, args...);
+						const Status status = this->children.front()->execute(entity, args...);
 						if (status == Status::Success || status == Status::Failure)
 						{
 							++currentRepetition;
-							if (!children.empty())
+							if (!this->children.empty())
 							{
-								children.front()->initialize(entity);
+								this->children.front()->initialize(entity);
 							}
 						}
 						return status;

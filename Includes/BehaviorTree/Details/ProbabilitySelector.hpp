@@ -89,7 +89,7 @@ namespace AO
 				virtual void initialize(EntityPtr entity) override final
 				{
 					currentNode.reset();
-					for (auto &child : children)
+					for (auto &child : this->children)
 					{
 						child->initialize(entity);
 					}

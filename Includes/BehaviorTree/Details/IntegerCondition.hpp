@@ -27,19 +27,19 @@ namespace AO
 				IntegerCondition(void) = delete;
 
 				IntegerCondition(const Function &function, ConditionTest condition, IntegerType target)
-					: ConditionNode(), IntegerConditionEnabler(), function(function), condition(condition), target(target)
+					: ConditionNode<Entity, Args...>(), Private::IntegerConditionEnabler<IntegerType>(), function(function), condition(condition), target(target)
 				{
 					assert(function && "Invalid function");
 				}
 
 				IntegerCondition(const IntegerCondition &other)
-					: ConditionNode(other), IntegerConditionEnabler(other), function(other.function), condition(other.condition), target(other.target)
+					: ConditionNode<Entity, Args...>(other), Private::IntegerConditionEnabler<IntegerType>(other), function(other.function), condition(other.condition), target(other.target)
 				{
 					return;
 				}
 
 				IntegerCondition(IntegerCondition &&other)
-					: ConditionNode(std::move(other)), IntegerConditionEnabler(std::move(other)), function(std::move(other.function)), condition(other.condition), target(other.target)
+					: ConditionNode<Entity, Args...>(std::move(other)), Private::IntegerConditionEnabler<IntegerType>(std::move(other)), function(std::move(other.function)), condition(other.condition), target(other.target)
 				{
 					other.target = 0;
 				}
@@ -48,8 +48,8 @@ namespace AO
 				{
 					if (this != &other)
 					{
-						ConditionNode::operator=(other);
-						IntegerConditionEnabler(other);
+						ConditionNode<Entity, Args...>::operator=(other);
+						Private::IntegerConditionEnabler<IntegerType>(other);
 						function = other.function;
 						condition = other.condition;
 						target = other.target;
@@ -61,8 +61,8 @@ namespace AO
 				{
 					if (this != &other)
 					{
-						ConditionNode::operator=(std::move(other));
-						IntegerConditionEnabler::operator=(std::move(other));
+						ConditionNode<Entity, Args...>::operator=(std::move(other));
+						Private::IntegerConditionEnabler<IntegerType>::operator=(std::move(other));
 						function = std::move(other.function);
 						condition = other.condition;
 						target = other.target;

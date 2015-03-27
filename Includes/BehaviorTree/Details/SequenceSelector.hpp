@@ -66,7 +66,7 @@ namespace AO
 				virtual void initialize(EntityPtr entity) override final
 				{
 					currentPosition = InitialPosition;
-					for (auto &child : children)
+					for (auto &child : this->children)
 					{
 						child->initialize(entity);
 					}
@@ -79,13 +79,13 @@ namespace AO
 						initialize(entity);
 						currentPosition = 0;
 					}
-					if (children.empty())
+					if (this->children.empty())
 					{
 						return Status::Success;
 					}
-					ChildPtr currentTask = children[currentPosition];
+					ChildPtr currentTask = this->children[currentPosition];
 					Status result = currentTask->execute(entity, args...);
-					const std::size_t lastPosition = children.size() - 1;
+					const std::size_t lastPosition = this->children.size() - 1;
 					while (result == Status::Success)
 					{
 						if (currentPosition == lastPosition)
@@ -96,7 +96,7 @@ namespace AO
 						else
 						{
 							++currentPosition;
-							currentTask = children[currentPosition];
+							currentTask = this->children[currentPosition];
 							result = currentTask->execute(entity, args...);
 						}
 					}

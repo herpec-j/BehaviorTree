@@ -78,7 +78,7 @@ namespace AO
 				virtual void initialize(EntityPtr entity) override final
 				{
 					childrenStatus.clear();
-					for (auto &child : children)
+					for (auto &child : this->children)
 					{
 						child->initialize(entity);
 						childrenStatus.insert(std::make_pair(child, Status::Running));
@@ -91,7 +91,7 @@ namespace AO
 					{
 						initialize(entity);
 					}
-					for (auto &child : children)
+					for (auto &child : this->children)
 					{
 						if (childrenStatus[child] == Status::Running)
 						{

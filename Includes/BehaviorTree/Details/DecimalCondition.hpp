@@ -29,19 +29,19 @@ namespace AO
 				DecimalCondition(void) = delete;
 
 				DecimalCondition(const Function &function, ConditionTest condition, DecimalType target, DecimalType epsilon = std::numeric_limits<DecimalType>::epsilon())
-					: ConditionNode(), DecimalConditionEnabler(), function(function), condition(condition), target(target), epsilon(epsilon)
+					: ConditionNode<Entity, Args...>(), Private::DecimalConditionEnabler<DecimalType>(), function(function), condition(condition), target(target), epsilon(epsilon)
 				{
 					assert(function && "Invalid function");
 				}
 
 				DecimalCondition(const DecimalCondition &other)
-					: ConditionNode(other), DecimalConditionEnabler(other), function(other.function), condition(other.condition), target(other.target), epsilon(other.epsilon)
+					: ConditionNode<Entity, Args...>(other), Private::DecimalConditionEnabler<DecimalType>(other), function(other.function), condition(other.condition), target(other.target), epsilon(other.epsilon)
 				{
 					return;
 				}
 
 				DecimalCondition(DecimalCondition &&other)
-					: ConditionNode(std::move(other)), DecimalConditionEnabler(std::move(other)), function(std::move(other.function)), condition(other.condition), target(other.target), epsilon(other.epsilon)
+					: ConditionNode<Entity, Args...>(std::move(other)), Private::DecimalConditionEnabler<DecimalType>(std::move(other)), function(std::move(other.function)), condition(other.condition), target(other.target), epsilon(other.epsilon)
 				{
 					other.target = 0;
 					other.epsilon = 0.0f;
@@ -51,8 +51,8 @@ namespace AO
 				{
 					if (this != &other)
 					{
-						ConditionNode::operator=(other);
-						DecimalConditionEnabler::operator=(other);
+						ConditionNode<Entity, Args...>::operator=(other);
+						Private::DecimalConditionEnabler<DecimalType>::operator=(other);
 						function = other.function;
 						condition = other.condition;
 						target = other.target;
@@ -65,8 +65,8 @@ namespace AO
 				{
 					if (this != &other)
 					{
-						ConditionNode::operator=(std::move(other));
-						DecimalConditionEnabler::operator=(std::move(other));
+						ConditionNode<Entity, Args...>::operator=(std::move(other));
+						Private::DecimalConditionEnabler<DecimalType>::operator=(std::move(other));
 						function = std::move(other.function);
 						condition = other.condition;
 						target = other.target;

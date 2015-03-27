@@ -66,7 +66,7 @@ namespace AO
 				virtual void initialize(EntityPtr entity) override final
 				{
 					currentPosition = InitialPosition;
-					for (auto &child : children)
+					for (auto &child : this->children)
 					{
 						child->initialize(entity);
 					}
@@ -76,7 +76,7 @@ namespace AO
 				{
 					if (currentPosition != InitialPosition)
 					{
-						const Status status = children[currentPosition]->execute(entity, args...);
+						const Status status = this->children[currentPosition]->execute(entity, args...);
 						switch (status)
 						{
 						case Status::Running:
@@ -86,7 +86,7 @@ namespace AO
 							return Status::Success;
 						case Status::Failure:
 							++currentPosition;
-							if (currentPosition == children.size())
+							if (currentPosition == this->children.size())
 							{
 								currentPosition = InitialPosition;
 								return Status::Failure;
@@ -104,25 +104,21 @@ namespace AO
 						initialize(entity);
 						currentPosition = 0;
 					}
-					if (children.empty())
+					if (this->children.empty())
 					{
 						return Status::Success;
 					}
-					ChildPtr currentlyRunningNode = children[currentPosition];
+					ChildPtr currentlyRunningNode = this->children[currentPosition];
 					Status status;
 					while ((status = currentlyRunningNode->execute(entity, args...)) == Status::Failure)
 					{
 						++currentPosition;
-						if (currentPosition == children.size())
+						if (currentPosition == this->children.size())
 						{
 							currentPosition = InitialPosition;
 							return Status::Failure;
 						}
-						currentlyRunningNode = children[currentPosition];
-					}
-					if (status == Status::Success)
-					{
-						currentPosition = InitialPosition;
+						currentlyRunningNode = this->children[currentPosition];
 					}
 					return status;
 				}

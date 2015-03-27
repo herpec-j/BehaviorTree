@@ -75,21 +75,21 @@ namespace AO
 				virtual void initialize(EntityPtr entity) override final
 				{
 					count = 0;
-					if (!children.empty())
+					if (!this->children.empty())
 					{
-						children.front()->initialize(entity);
+						this->children.front()->initialize(entity);
 					}
 				}
 
 				virtual Status filter(EntityPtr entity, Args... args) override final
 				{
-					if (children.empty())
+					if (this->children.empty())
 					{
 						return Status::Success;
 					}
 					else
 					{
-						const Status status = children.front()->execute(entity, args...);
+						const Status status = this->children.front()->execute(entity, args...);
 						if (status == Status::Success)
 						{
 							++count;

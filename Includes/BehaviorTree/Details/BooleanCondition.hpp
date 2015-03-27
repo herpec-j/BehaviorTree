@@ -25,19 +25,19 @@ namespace AO
 				BooleanCondition(void) = delete;
 
 				BooleanCondition(const Function &function, bool testValue = true)
-					: ConditionNode(), function(function), testValue(testValue)
+					: ConditionNode<Entity, Args...>(), function(function), testValue(testValue)
 				{
 					assert(function && "Invalid function");
 				}
 
 				BooleanCondition(const BooleanCondition &other)
-					: ConditionNode(other), function(other.function), testValue(other.testValue)
+					: ConditionNode<Entity, Args...>(other), function(other.function), testValue(other.testValue)
 				{
 					return;
 				}
 
 				BooleanCondition(BooleanCondition &&other)
-					: ConditionNode(std::move(other)), function(std::move(other.function)), testValue(other.testValue)
+					: ConditionNode<Entity, Args...>(std::move(other)), function(std::move(other.function)), testValue(other.testValue)
 				{
 					return;
 				}
@@ -46,7 +46,7 @@ namespace AO
 				{
 					if (this != &other)
 					{
-						ConditionNode::operator=(other);
+						ConditionNode<Entity, Args...>::operator=(other);
 						function = other.function;
 						testValue = other.testValue;
 					}
@@ -57,7 +57,7 @@ namespace AO
 				{
 					if (this != &other)
 					{
-						ConditionNode::operator=(std::move(other));
+						ConditionNode<Entity, Args...>::operator=(std::move(other));
 						function = std::move(other.function);
 						testValue = other.testValue;
 					}
