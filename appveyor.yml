@@ -6,5 +6,4 @@ before_build:
   - cd Build
   - cmake .. -G "Visual Studio 12"
 build:
-  project:
-    - RUN_TESTS.vcxproj
+  project: RUN_TESTS.vcxproj
