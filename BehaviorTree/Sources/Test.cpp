@@ -467,7 +467,7 @@ static void testBehaviorTree(void)
 					break;
 			}
 		}
-		assert(std::max(successes, failures) <= 5100);
+		assert(std::max(successes, failures) <= 5200);
 	}
 {
 	auto node = std::make_shared<Agent::RepeatDecorator>(5);
