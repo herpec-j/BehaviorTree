@@ -5,6 +5,7 @@ before_build:
   - mkdir Build
   - cd Build
   - cmake .. -G "Visual Studio 12"
-  - cmake --build . --target ALL_BUILD
-  - cmake --build . --target RUN_TESTS
-build:
+build_script:
+  - msbuild BehaviorTree.sln /nologo /verbosity:minimal
+test_script:
+  - msbuild RUN_TESTS.vcxproj /nologo /verbosity:minimal
