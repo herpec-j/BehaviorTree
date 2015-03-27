@@ -53,7 +53,6 @@ struct Agent : public AO::BehaviorTree::BehaviorTree < Agent, short >
 
 static void testBehaviorTree(void)
 {
-	std::cout << "Test BehaviorTree..." << std::endl;
 	Agent agent;
 	{
 		agent.assignBehavior<Agent::BooleanCondition>(std::bind(&Agent::returnTrue, &agent), true);
@@ -547,11 +546,11 @@ static void testBehaviorTree(void)
 			assert(agent.update(42) == AO::BehaviorTree::Status::Failure);
 		}
 	}
-	std::cout << "Test BehaviorTree OK !" << std::endl;
 }
 
 int main(int, char *[])
 {
 	testBehaviorTree();
+	std::cout << "Success!" << std::endl;
 	return EXIT_SUCCESS;
 }

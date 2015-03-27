@@ -80,4 +80,4 @@ enable_testing()
 add_test(BehaviorTreeUnitTests BehaviorTreeTest)
 
 set_tests_properties(BehaviorTreeUnitTests
-	PROPERTIES PASS_REGULAR_EXPRESSION "Working fine")
+	PROPERTIES PASS_REGULAR_EXPRESSION "Success")
