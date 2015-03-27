@@ -89,7 +89,7 @@ namespace AO
 
 				ChildPtr removeChild(ChildPtr child)
 				{
-					ChildrenList::iterator child_it = std::find(children.begin(), children.end(), child);
+					typename ChildrenList::iterator child_it = std::find(children.begin(), children.end(), child);
 					assert(child_it != children.end() && "Invalid child");
 					if (child_it != children.end())
 					{
@@ -109,7 +109,7 @@ namespace AO
 					assert(position < children.size() && "Invalid position");
 					if (position < children.size())
 					{
-						ChildrenList::iterator child_it = std::next(children.begin(), position);
+						typename ChildrenList::iterator child_it = std::next(children.begin(), position);
 						ChildPtr child = *child_it;
 						onChildRemoved(child);
 						child->onParentRemoved(shared_from_this());
