@@ -34,7 +34,7 @@ DEPENDENCIES_EXTENSION				= dpp
 SOURCES 					= $(shell find $(SOURCES_DIRECTORY) -name "*.$(SOURCES_EXTENSION)")
 OBJECTS						= $(patsubst $(SOURCES_DIRECTORY)/%, $(OBJECTS_DIRECTORY)/%, $(SOURCES:.$(SOURCES_EXTENSION)=.$(OBJECTS_EXTENSION)))
 DEPENDENCIES					= $(patsubst $(OBJECTS_DIRECTORY)/%, $(DEPENDENCIES_DIRECTORY)/%, $(OBJECTS:.$(OBJECTS_EXTENSION)=.$(DEPENDENCIES_EXTENSION)))
-LIBRARIES					= $(shell ls $(LIBRARIES_DIRECTORY))
+LIBRARIES					= $(shell ls 2> /dev/null $(LIBRARIES_DIRECTORY))
 LIBRARIES					:= $(foreach LIBRARY, $(LIBRARIES),-I $(LIBRARIES_DIRECTORY)/$(LIBRARY)/include)
 
 VERBOSE						= 0
@@ -94,8 +94,7 @@ clean:
 						@$(PRINTF) $(OK_MESSAGE)'[\033[31m$(ID)::Dependencies\033[0m] cleaned\n'
 
 fclean: 					clean
-						@$(RM) Debug
-						@$(RM) Release
+						@$(RM) $(BINARY_DIRECTORY)
 						@$(PRINTF) $(OK_MESSAGE)'[\033[31m$(ID)::Executable\033[0m] cleaned\n'
 
 re:						fclean all
