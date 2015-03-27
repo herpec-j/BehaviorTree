@@ -5,7 +5,5 @@ before_build:
   - mkdir Build
   - cd Build
   - cmake .. -G "Visual Studio 12"
-  - ls
-  - pwd
 build:
-  project: .\RUN_TESTS.vcxproj
+  project: Build\RUN_TESTS.vcxproj
