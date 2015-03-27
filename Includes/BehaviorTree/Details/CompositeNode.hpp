@@ -83,8 +83,8 @@ namespace AO
 					assert(child && "Invalid child");
 					children.push_back(child);
 					onChildAdded(child);
-					child->onParentAdded(shared_from_this());
-					return shared_from_this();
+					child->onParentAdded(this->shared_from_this());
+					return this->shared_from_this();
 				}
 
 				ChildPtr removeChild(ChildPtr child)
@@ -94,7 +94,7 @@ namespace AO
 					if (child_it != children.end())
 					{
 						onChildRemoved(child);
-						child->onParentRemoved(shared_from_this());
+						child->onParentRemoved(this->shared_from_this());
 						children.erase(child_it);
 						return child;
 					}
@@ -112,7 +112,7 @@ namespace AO
 						typename ChildrenList::iterator child_it = std::next(children.begin(), position);
 						ChildPtr child = *child_it;
 						onChildRemoved(child);
-						child->onParentRemoved(shared_from_this());
+						child->onParentRemoved(this->shared_from_this());
 						children.erase(child_it);
 						return child;
 					}

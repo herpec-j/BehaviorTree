@@ -26,7 +26,7 @@ namespace AO
 				using WeightingMap = std::unordered_map < ChildPtr, float > ;
 
 				float totalSum = 0.0f;
-				ChildPtr currentNode = nullptr;
+				ChildPtr currentNode;
 				WeightingMap weightingMap;
 
 			public:

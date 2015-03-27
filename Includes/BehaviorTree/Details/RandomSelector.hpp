@@ -23,7 +23,7 @@ namespace AO
 				using ChildPtr = typename CompositeNode<Entity, Args...>::ChildPtr;
 				using ChildrenList = typename CompositeNode<Entity, Args...>::ChildrenList;
 
-				ChildPtr currentNode = nullptr;
+				ChildPtr currentNode;
 
 			public:
 				RandomSelector(void) = default;
