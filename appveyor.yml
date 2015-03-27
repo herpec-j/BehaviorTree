@@ -1,0 +1,8 @@
+before_build:
+  - mkdir Build
+  - cd Build
+  - cmake ..
+build:
+  - make
+  - make test
+  
