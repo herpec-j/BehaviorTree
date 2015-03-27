@@ -1,3 +1,3 @@
 #!/bin/bash -e
 
-make VERBOSE=1 run || cat Testing/Temporary/LastTest.log
+make run VERBOSE=1 || cat Testing/Temporary/LastTest.log
