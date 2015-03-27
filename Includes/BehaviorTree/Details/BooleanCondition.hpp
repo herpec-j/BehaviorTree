@@ -14,9 +14,14 @@ namespace AO
 			template < class Entity, typename... Args >
 			class BooleanCondition final : public ConditionNode<Entity, Args...>
 			{
-			public:
-				using Function = std::function < bool(EntityPtr, Args...) > ;
+			private:
+				using EntityType = typename ConditionNode<Entity, Args...>::EntityType;
+				using EntityPtr = typename ConditionNode<Entity, Args...>::EntityPtr;
+				using Parent = typename ConditionNode<Entity, Args...>::Parent;
+				using ParentPtr = typename ConditionNode<Entity, Args...>::ParentPtr;
+				using Function = std::function < bool(EntityPtr, Args...) >;
 
+			public:
 				BooleanCondition(void) = delete;
 
 				BooleanCondition(const Function &function, bool testValue = true)

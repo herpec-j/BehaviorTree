@@ -15,6 +15,11 @@ namespace AO
 				virtual ~ConditionNode(void) = default;
 
 			protected:
+				using EntityType = typename LeafNode<Entity, Args...>::EntityType;
+				using EntityPtr = typename LeafNode<Entity, Args...>::EntityPtr;
+				using Parent = typename LeafNode<Entity, Args...>::Parent;
+				using ParentPtr = typename LeafNode<Entity, Args...>::ParentPtr;
+
 				ConditionNode(void) = default;
 				ConditionNode(const ConditionNode &other) = default;
 				ConditionNode &operator=(const ConditionNode &other) = default;

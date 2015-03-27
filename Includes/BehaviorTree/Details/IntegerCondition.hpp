@@ -18,9 +18,14 @@ namespace AO
 			{
 				static_assert(std::is_integral<IntegerType>::value && !std::is_same<IntegerType, bool>::value, "DecimalType should be a integer type (std::int8_t, std::int16_t, std::int32_t, std::int64_t, std::uint8_t, std::uint16_t, std::uint32_t, or std::uint64_t)");
 
-			public:
-				using Function = std::function < IntegerType(EntityPtr, Args...) > ;
+			private:
+				using EntityType = typename ConditionNode<Entity, Args...>::EntityType;
+				using EntityPtr = typename ConditionNode<Entity, Args...>::EntityPtr;
+				using Parent = typename ConditionNode<Entity, Args...>::Parent;
+				using ParentPtr = typename ConditionNode<Entity, Args...>::ParentPtr;
+				using Function = std::function < IntegerType(EntityPtr, Args...) >;
 
+			public:
 				IntegerCondition(void) = delete;
 
 				IntegerCondition(const Function &function, ConditionTest condition, IntegerType target)

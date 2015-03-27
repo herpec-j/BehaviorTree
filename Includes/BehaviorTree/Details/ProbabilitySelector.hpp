@@ -16,6 +16,13 @@ namespace AO
 			class ProbabilitySelector final : public CompositeNode<Entity, Args...>
 			{
 			private:
+				using EntityType = typename CompositeNode<Entity, Args...>::EntityType;
+				using EntityPtr = typename CompositeNode<Entity, Args...>::EntityPtr;
+				using Parent = typename CompositeNode<Entity, Args...>::Parent;
+				using ParentPtr = typename CompositeNode<Entity, Args...>::ParentPtr;
+				using Child = typename CompositeNode<Entity, Args...>::Child;
+				using ChildPtr = typename CompositeNode<Entity, Args...>::ChildPtr;
+				using ChildrenList = typename CompositeNode<Entity, Args...>::ChildrenList;
 				using WeightingMap = std::unordered_map < ChildPtr, float > ;
 
 				float totalSum = 0.0f;

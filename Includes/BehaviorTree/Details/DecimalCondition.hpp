@@ -20,9 +20,14 @@ namespace AO
 			{
 				static_assert(std::is_floating_point<DecimalType>::value, "DecimalType should be a floating-point type (float, double, or long double)");
 
-			public:
-				using Function = std::function < DecimalType(EntityPtr, Args...) > ;
+			private:
+				using EntityType = typename ConditionNode<Entity, Args...>::EntityType;
+				using EntityPtr = typename ConditionNode<Entity, Args...>::EntityPtr;
+				using Parent = typename ConditionNode<Entity, Args...>::Parent;
+				using ParentPtr = typename ConditionNode<Entity, Args...>::ParentPtr;
+				using Function = std::function < DecimalType(EntityPtr, Args...) >;
 
+			public:
 				DecimalCondition(void) = delete;
 
 				DecimalCondition(const Function &function, ConditionTest condition, DecimalType target, DecimalType epsilon = std::numeric_limits<DecimalType>::epsilon())

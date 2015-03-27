@@ -15,6 +15,11 @@ namespace AO
 				virtual ~ActionNode(void) = default;
 
 			protected:
+				using EntityType = typename LeafNode<Entity, Args...>::EntityType;
+				using EntityPtr = typename LeafNode<Entity, Args...>::EntityPtr;
+				using Parent = typename LeafNode<Entity, Args...>::Parent;
+				using ParentPtr = typename LeafNode<Entity, Args...>::ParentPtr;
+
 				ActionNode(void) = default;
 				ActionNode(const ActionNode &other) = default;
 				ActionNode &operator=(const ActionNode &other) = default;

@@ -18,6 +18,10 @@ namespace AO
 			class CompositeNode : public LeafNode < Entity, Args... >, public std::enable_shared_from_this<CompositeNode<Entity, Args...>>
 			{
 			protected:
+				using EntityType = typename LeafNode<Entity, Args...>::EntityType;
+				using EntityPtr = typename LeafNode<Entity, Args...>::EntityPtr;
+				using Parent = typename LeafNode<Entity, Args...>::Parent;
+				using ParentPtr = typename LeafNode<Entity, Args...>::ParentPtr;
 				using Child = LeafNode<Entity, Args...>;
 				using ChildPtr = std::shared_ptr<Child>;
 				using ChildrenList = std::vector<ChildPtr>;

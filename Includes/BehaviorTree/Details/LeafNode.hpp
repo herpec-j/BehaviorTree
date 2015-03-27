@@ -18,13 +18,9 @@ namespace AO
 			{
 				friend class CompositeNode < Entity, Args... > ;
 
-			public:
-				virtual ~LeafNode(void) = default;
-
-				virtual void initialize(EntityPtr entity) override = 0;
-				virtual Status execute(EntityPtr entity, Args... args) override = 0;
-
 			protected:
+				using EntityType = typename RootNode<Entity, Args... >::EntityType;
+				using EntityPtr = typename RootNode<Entity, Args... >::EntityPtr;
 				using Parent = CompositeNode<Entity, Args...>;
 				using ParentPtr = std::shared_ptr<Parent>;
 
@@ -41,6 +37,12 @@ namespace AO
 				{
 					return;
 				}
+
+			public:
+				virtual ~LeafNode(void) = default;
+
+				virtual void initialize(EntityPtr entity) override = 0;
+				virtual Status execute(EntityPtr entity, Args... args) override = 0;
 			};
 		}
 	}

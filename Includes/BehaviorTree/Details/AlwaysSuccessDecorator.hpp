@@ -11,6 +11,15 @@ namespace AO
 			template <class Entity, typename... Args>
 			class AlwaysSuccessDecorator final : public DecoratorNode < Entity, Args... >
 			{
+			private:
+				using EntityType = typename DecoratorNode<Entity, Args...>::EntityType;
+				using EntityPtr = typename DecoratorNode<Entity, Args...>::EntityPtr;
+				using Parent = typename DecoratorNode<Entity, Args...>::Parent;
+				using ParentPtr = typename DecoratorNode<Entity, Args...>::ParentPtr;
+				using Child = typename DecoratorNode<Entity, Args...>::Child;
+				using ChildPtr = typename DecoratorNode<Entity, Args...>::ChildPtr;
+				using ChildrenList = typename DecoratorNode<Entity, Args...>::ChildrenList;
+
 			public:
 				AlwaysSuccessDecorator(void) = default;
 				AlwaysSuccessDecorator(const AlwaysSuccessDecorator &other) = default;

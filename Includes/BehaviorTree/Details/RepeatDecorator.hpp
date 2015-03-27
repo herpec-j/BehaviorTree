@@ -14,6 +14,14 @@ namespace AO
 			class RepeatDecorator final : public DecoratorNode<Entity, Args...>
 			{
 			private:
+				using EntityType = typename DecoratorNode<Entity, Args...>::EntityType;
+				using EntityPtr = typename DecoratorNode<Entity, Args...>::EntityPtr;
+				using Parent = typename DecoratorNode<Entity, Args...>::Parent;
+				using ParentPtr = typename DecoratorNode<Entity, Args...>::ParentPtr;
+				using Child = typename DecoratorNode<Entity, Args...>::Child;
+				using ChildPtr = typename DecoratorNode<Entity, Args...>::ChildPtr;
+				using ChildrenList = typename DecoratorNode<Entity, Args...>::ChildrenList;
+
 				std::size_t target;
 				std::size_t count = 0;
 
