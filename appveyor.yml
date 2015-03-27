@@ -7,3 +7,4 @@ before_build:
   - cmake .. -G "Visual Studio 12"
   - cmake --build . --target ALL_BUILD
   - cmake --build . --target RUN_TESTS
+build:
