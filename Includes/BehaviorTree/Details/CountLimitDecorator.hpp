@@ -28,19 +28,19 @@ namespace AO
 				CountLimitDecorator(void) = delete;
 
 				CountLimitDecorator(std::size_t limit, bool allowReinitialize = true)
-					: limit(limit), allowReinitialize(allowReinitialize)
+					: DecoratorNode<Entity, Args...>(), limit(limit), allowReinitialize(allowReinitialize)
 				{
 					return;
 				}
 
 				CountLimitDecorator(const CountLimitDecorator &other)
-					: DecoratorNode(other), limit(other.limit), currentRepetition(other.currentRepetition), allowReinitialize(other.allowReinitialize)
+					: DecoratorNode<Entity, Args...>(other), limit(other.limit), currentRepetition(other.currentRepetition), allowReinitialize(other.allowReinitialize)
 				{
 					return;
 				}
 
 				CountLimitDecorator(CountLimitDecorator &&other)
-					: DecoratorNode(std::move(other)), limit(other.limit), currentRepetition(other.currentRepetition), allowReinitialize(other.allowReinitialize)
+					: DecoratorNode<Entity, Args...>(std::move(other)), limit(other.limit), currentRepetition(other.currentRepetition), allowReinitialize(other.allowReinitialize)
 				{
 					other.limit = 0;
 					other.currentRepetition = 0;
@@ -50,7 +50,7 @@ namespace AO
 				{
 					if (this != &other)
 					{
-						DecoratorNode::operator=(other);
+						DecoratorNode<Entity, Args...>::operator=(other);
 						limit = other.limit;
 						currentRepetition = other.currentRepetition;
 						allowReinitialize = other.allowReinitialize;
@@ -62,7 +62,7 @@ namespace AO
 				{
 					if (this != &other)
 					{
-						DecoratorNode::operator=(std::move(other));
+						DecoratorNode<Entity, Args...>::operator=(std::move(other));
 						limit = other.limit;
 						other.limit = 0;
 						currentRepetition = other.currentRepetition;

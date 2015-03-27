@@ -28,13 +28,13 @@ namespace AO
 				SequenceSelector(void) = default;
 
 				SequenceSelector(const SequenceSelector &other)
-					: CompositeNode(other), currentPosition(other.currentPosition)
+					: CompositeNode<Entity, Args...>(other), currentPosition(other.currentPosition)
 				{
 					return;
 				}
 
 				SequenceSelector(SequenceSelector &&other)
-					: CompositeNode(std::move(other)), currentPosition(other.currentPosition)
+					: CompositeNode<Entity, Args...>(std::move(other)), currentPosition(other.currentPosition)
 				{
 					other.currentPosition = InitialPosition;
 				}
@@ -43,7 +43,7 @@ namespace AO
 				{
 					if (this != &other)
 					{
-						CompositeNode::operator=(other);
+						CompositeNode<Entity, Args...>::operator=(other);
 						currentPosition = other.currentPosition;
 					}
 					return *this;
@@ -53,7 +53,7 @@ namespace AO
 				{
 					if (this != &other)
 					{
-						CompositeNode::operator=(std::move(other));
+						CompositeNode<Entity, Args...>::operator=(std::move(other));
 						currentPosition = other.currentPosition;
 						other.currentPosition = 0;
 					}

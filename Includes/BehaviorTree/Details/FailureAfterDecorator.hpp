@@ -27,19 +27,19 @@ namespace AO
 				FailureAfterDecorator(void) = delete;
 
 				FailureAfterDecorator(std::size_t total)
-					: DecoratorNode(), total(total), count(total)
+					: DecoratorNode<Entity, Args...>(), total(total), count(total)
 				{
 					return;
 				}
 
 				FailureAfterDecorator(const FailureAfterDecorator &other)
-					: DecoratorNode(other), total(other.total), count(other.count)
+					: DecoratorNode<Entity, Args...>(other), total(other.total), count(other.count)
 				{
 					return;
 				}
 
 				FailureAfterDecorator(FailureAfterDecorator &&other)
-					: DecoratorNode(std::move(other)), total(other.total), count(other.count)
+					: DecoratorNode<Entity, Args...>(std::move(other)), total(other.total), count(other.count)
 				{
 					other.total = 0;
 					other.count = 0;
@@ -49,7 +49,7 @@ namespace AO
 				{
 					if (this != &other)
 					{
-						DecoratorNode::operator=(other);
+						DecoratorNode<Entity, Args...>::operator=(other);
 						total = other.total;
 						count = other.count;
 					}
@@ -60,7 +60,7 @@ namespace AO
 				{
 					if (this != &other)
 					{
-						DecoratorNode::operator=(std::move(other));
+						DecoratorNode<Entity, Args...>::operator=(std::move(other));
 						total = other.total;
 						other.total = 0;
 						count = other.count;

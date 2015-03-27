@@ -31,13 +31,13 @@ namespace AO
 				CompositeNode(void) = default;
 
 				CompositeNode(const CompositeNode &other)
-					: LeafNode(other), children(other.children)
+					: LeafNode<Entity, Args...>(other), children(other.children)
 				{
 					return;
 				}
 
 				CompositeNode(CompositeNode &&other)
-					: LeafNode(std::move(other)), children(std::move(other.children))
+					: LeafNode<Entity, Args...>(std::move(other)), children(std::move(other.children))
 				{
 					return;
 				}
@@ -46,7 +46,7 @@ namespace AO
 				{
 					if (this != &other)
 					{
-						LeafNode::operator=(other);
+						LeafNode<Entity, Args...>::operator=(other);
 						children = other.children;
 					}
 					return *this;
@@ -56,7 +56,7 @@ namespace AO
 				{
 					if (this != &other)
 					{
-						LeafNode::operator=(std::move(other));
+						LeafNode<Entity, Args...>::operator=(std::move(other));
 						children = std::move(other.children);
 					}
 					return *this;

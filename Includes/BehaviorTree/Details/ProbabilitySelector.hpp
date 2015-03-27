@@ -33,13 +33,13 @@ namespace AO
 				ProbabilitySelector(void) = default;
 
 				ProbabilitySelector(const ProbabilitySelector &other)
-					: CompositeNode(other), totalSum(other.totalSum), currentNode(other.currentNode), weightingMap(other.weightingMap)
+					: CompositeNode<Entity, Args...>(other), totalSum(other.totalSum), currentNode(other.currentNode), weightingMap(other.weightingMap)
 				{
 					return;
 				}
 
 				ProbabilitySelector(ProbabilitySelector &&other)
-					: CompositeNode(std::move(other)), totalSum(other.totalSum), currentNode(std::move(other.currentNode)), weightingMap(std::move(other.weightingMap))
+					: CompositeNode<Entity, Args...>(std::move(other)), totalSum(other.totalSum), currentNode(std::move(other.currentNode)), weightingMap(std::move(other.weightingMap))
 				{
 					other.totalSum = 0.0f;
 				}
@@ -48,7 +48,7 @@ namespace AO
 				{
 					if (this != &other)
 					{
-						CompositeNode::operator=(other);
+						CompositeNode<Entity, Args...>::operator=(other);
 						totalSum = other.totalSum;
 						currentNode = other.currentNode;
 						weightingMap = other.weightingMap;
@@ -60,7 +60,7 @@ namespace AO
 				{
 					if (this != &other)
 					{
-						CompositeNode::operator=(std::move(other));
+						CompositeNode<Entity, Args...>::operator=(std::move(other));
 						totalSum = other.totalSum;
 						other.totalSum = 0.0f;
 						currentNode = std::move(other.currentNode);
@@ -82,7 +82,7 @@ namespace AO
 					assert(weighting >= 0.0f && "Invalid weighting");
 					weightingMap[child] = weighting;
 					totalSum += weighting;
-					return CompositeNode::addChild(child);
+					return CompositeNode<Entity, Args...>::addChild(child);
 				}
 
 			protected:

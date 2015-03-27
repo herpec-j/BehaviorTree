@@ -27,19 +27,19 @@ namespace AO
 
 			public:
 				RepeatDecorator(std::size_t repeats)
-					: target(repeats)
+					: DecoratorNode<Entity, Args...>(), target(repeats)
 				{
 					return;
 				}
 
 				RepeatDecorator(const RepeatDecorator &other)
-					: DecoratorNode(other), target(other.target), count(other.count)
+					: DecoratorNode<Entity, Args...>(other), target(other.target), count(other.count)
 				{
 					return;
 				}
 
 				RepeatDecorator(RepeatDecorator &&other)
-					: DecoratorNode(std::move(other)), target(other.target), count(other.count)
+					: DecoratorNode<Entity, Args...>(std::move(other)), target(other.target), count(other.count)
 				{
 					other.target = 0;
 					other.count = 0;
@@ -49,7 +49,7 @@ namespace AO
 				{
 					if (this != &other)
 					{
-						DecoratorNode::operator=(other);
+						DecoratorNode<Entity, Args...>::operator=(other);
 						target = other.target;
 						count = other.count;
 					}
@@ -60,7 +60,7 @@ namespace AO
 				{
 					if (this != &other)
 					{
-						DecoratorNode::operator=(std::move(other));
+						DecoratorNode<Entity, Args...>::operator=(std::move(other));
 						target = other.target;
 						other.target = 0;
 						count = other.count;

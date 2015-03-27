@@ -29,13 +29,13 @@ namespace AO
 				RandomSelector(void) = default;
 
 				RandomSelector(const RandomSelector &other)
-					: CompositeNode(other), currentNode(other.currentNode)
+					: CompositeNode<Entity, Args...>(other), currentNode(other.currentNode)
 				{
 					return;
 				}
 
 				RandomSelector(RandomSelector &&other)
-					: CompositeNode(std::move(other)), currentNode(std::move(other.currentNode))
+					: CompositeNode<Entity, Args...>(std::move(other)), currentNode(std::move(other.currentNode))
 				{
 					return;
 				}
@@ -44,7 +44,7 @@ namespace AO
 				{
 					if (this != &other)
 					{
-						CompositeNode::operator=(other);
+						CompositeNode<Entity, Args...>::operator=(other);
 						currentNode = other.currentNode;
 					}
 					return *this;
@@ -54,7 +54,7 @@ namespace AO
 				{
 					if (this != &other)
 					{
-						CompositeNode::operator=(std::move(other));
+						CompositeNode<Entity, Args...>::operator=(std::move(other));
 						currentNode = std::move(other.currentNode);
 					}
 					return *this;

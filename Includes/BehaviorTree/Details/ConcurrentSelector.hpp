@@ -31,19 +31,19 @@ namespace AO
 
 			public:
 				ConcurrentSelector(FailurePolicy failPolicy = FailurePolicy::FailOnAll, SuccessPolicy succeedPolicy = SuccessPolicy::SuccessOnAll)
-					: failPolicy(failPolicy), succeedPolicy(succeedPolicy)
+					: CompositeNode<Entity, Args...>(), failPolicy(failPolicy), succeedPolicy(succeedPolicy)
 				{
 					return;
 				}
 
 				ConcurrentSelector(const ConcurrentSelector &other)
-					: CompositeNode(other), failPolicy(other.failPolicy), succeedPolicy(other.succeedPolicy), childrenStatus(other.childrenStatus)
+					: CompositeNode<Entity, Args...>(other), failPolicy(other.failPolicy), succeedPolicy(other.succeedPolicy), childrenStatus(other.childrenStatus)
 				{
 					return;
 				}
 
 				ConcurrentSelector(ConcurrentSelector &&other)
-					: CompositeNode(std::move(other)), failPolicy(other.failPolicy), succeedPolicy(other.succeedPolicy), childrenStatus(std::move(other.childrenStatus))
+					: CompositeNode<Entity, Args...>(std::move(other)), failPolicy(other.failPolicy), succeedPolicy(other.succeedPolicy), childrenStatus(std::move(other.childrenStatus))
 				{
 					return;
 				}
@@ -52,7 +52,7 @@ namespace AO
 				{
 					if (this != &other)
 					{
-						CompositeNode::operator=(other);
+						CompositeNode<Entity, Args...>::operator=(other);
 						failPolicy = other.failPolicy;
 						succeedPolicy = other.succeedPolicy;
 						childrenStatus = other.childrenStatus;
@@ -64,7 +64,7 @@ namespace AO
 				{
 					if (this != &other)
 					{
-						CompositeNode::operator=(std::move(other));
+						CompositeNode<Entity, Args...>::operator=(std::move(other));
 						failPolicy = other.failPolicy;
 						succeedPolicy = other.succeedPolicy;
 						childrenStatus = std::move(other.childrenStatus);

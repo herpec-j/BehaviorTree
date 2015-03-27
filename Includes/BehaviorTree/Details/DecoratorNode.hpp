@@ -26,7 +26,7 @@ namespace AO
 				virtual ParentPtr addChild(ChildPtr child) override final
 				{
 					assert(children.empty() && "Tree should be empty");
-					return CompositeNode::addChild(child);
+					return CompositeNode<Entity, Args...>::addChild(child);
 				}
 
 			protected:
