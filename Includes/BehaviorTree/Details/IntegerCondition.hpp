@@ -1,11 +1,11 @@
 #pragma once
 
 #include <functional>
-#include <type_traits>
 #include <cassert>
 
 #include "Details/ConditionNode.hpp"
 #include "Details/ConditionTest.hpp"
+#include "Details/Private/IntegerConditionEnabler.hpp"
 
 namespace AO
 {
@@ -14,10 +14,8 @@ namespace AO
 		namespace Details
 		{
 			template < typename IntegerType, class Entity, typename... Args >
-			class IntegerCondition final : public ConditionNode<Entity, Args...>
+			class IntegerCondition final : public ConditionNode<Entity, Args...>, public Private::IntegerConditionEnabler<IntegerType>
 			{
-				static_assert(std::is_integral<IntegerType>::value && !std::is_same<IntegerType, bool>::value, "DecimalType should be a integer type (std::int8_t, std::int16_t, std::int32_t, std::int64_t, std::uint8_t, std::uint16_t, std::uint32_t, or std::uint64_t)");
-
 			private:
 				using EntityType = typename ConditionNode<Entity, Args...>::EntityType;
 				using EntityPtr = typename ConditionNode<Entity, Args...>::EntityPtr;
@@ -29,20 +27,19 @@ namespace AO
 				IntegerCondition(void) = delete;
 
 				IntegerCondition(const Function &function, ConditionTest condition, IntegerType target)
-					: ConditionNode(), function(function), condition(condition), target(target)
+					: ConditionNode(), IntegerConditionEnabler(), function(function), condition(condition), target(target)
 				{
 					assert(function && "Invalid function");
-
 				}
 
 				IntegerCondition(const IntegerCondition &other)
-					: ConditionNode(other), function(other.function), condition(other.condition), target(other.target)
+					: ConditionNode(other), IntegerConditionEnabler(other), function(other.function), condition(other.condition), target(other.target)
 				{
 					return;
 				}
 
 				IntegerCondition(IntegerCondition &&other)
-					: ConditionNode(std::move(other)), function(std::move(other.function)), condition(other.condition), target(other.target)
+					: ConditionNode(std::move(other)), IntegerConditionEnabler(std::move(other)), function(std::move(other.function)), condition(other.condition), target(other.target)
 				{
 					other.target = 0;
 				}
@@ -52,6 +49,7 @@ namespace AO
 					if (this != &other)
 					{
 						ConditionNode::operator=(other);
+						IntegerConditionEnabler(other);
 						function = other.function;
 						condition = other.condition;
 						target = other.target;
@@ -64,6 +62,7 @@ namespace AO
 					if (this != &other)
 					{
 						ConditionNode::operator=(std::move(other));
+						IntegerConditionEnabler::operator=(std::move(other));
 						function = std::move(other.function);
 						condition = other.condition;
 						target = other.target;

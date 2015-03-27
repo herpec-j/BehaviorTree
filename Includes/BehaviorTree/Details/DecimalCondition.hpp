@@ -1,13 +1,13 @@
 #pragma once
 
 #include <functional>
-#include <type_traits>
 #include <limits>
 #include <cmath>
 #include <cassert>
 
 #include "Details/ConditionNode.hpp"
 #include "Details/ConditionTest.hpp"
+#include "Details/Private/DecimalConditionEnabler.hpp"
 
 namespace AO
 {
@@ -16,10 +16,8 @@ namespace AO
 		namespace Details
 		{
 			template < typename DecimalType, class Entity, typename... Args >
-			class DecimalCondition final : public ConditionNode<Entity, Args...>
+			class DecimalCondition final : public ConditionNode<Entity, Args...>, public Private::DecimalConditionEnabler<DecimalType>
 			{
-				static_assert(std::is_floating_point<DecimalType>::value, "DecimalType should be a floating-point type (float, double, or long double)");
-
 			private:
 				using EntityType = typename ConditionNode<Entity, Args...>::EntityType;
 				using EntityPtr = typename ConditionNode<Entity, Args...>::EntityPtr;
@@ -31,19 +29,19 @@ namespace AO
 				DecimalCondition(void) = delete;
 
 				DecimalCondition(const Function &function, ConditionTest condition, DecimalType target, DecimalType epsilon = std::numeric_limits<DecimalType>::epsilon())
-					: ConditionNode(), function(function), condition(condition), target(target), epsilon(epsilon)
+					: ConditionNode(), DecimalConditionEnabler(), function(function), condition(condition), target(target), epsilon(epsilon)
 				{
 					assert(function && "Invalid function");
 				}
 
 				DecimalCondition(const DecimalCondition &other)
-					: ConditionNode(other), function(other.function), condition(other.condition), target(other.target), epsilon(other.epsilon)
+					: ConditionNode(other), DecimalConditionEnabler(other), function(other.function), condition(other.condition), target(other.target), epsilon(other.epsilon)
 				{
 					return;
 				}
 
 				DecimalCondition(DecimalCondition &&other)
-					: ConditionNode(std::move(other)), function(std::move(other.function)), condition(other.condition), target(other.target), epsilon(other.epsilon)
+					: ConditionNode(std::move(other)), DecimalConditionEnabler(std::move(other)), function(std::move(other.function)), condition(other.condition), target(other.target), epsilon(other.epsilon)
 				{
 					other.target = 0;
 					other.epsilon = 0.0f;
@@ -54,6 +52,7 @@ namespace AO
 					if (this != &other)
 					{
 						ConditionNode::operator=(other);
+						DecimalConditionEnabler::operator=(other);
 						function = other.function;
 						condition = other.condition;
 						target = other.target;
@@ -67,6 +66,7 @@ namespace AO
 					if (this != &other)
 					{
 						ConditionNode::operator=(std::move(other));
+						DecimalConditionEnabler::operator=(std::move(other));
 						function = std::move(other.function);
 						condition = other.condition;
 						target = other.target;

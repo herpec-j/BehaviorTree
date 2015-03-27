@@ -30,6 +30,8 @@
     <ClInclude Include="Includes\BehaviorTree\Details\FunctionCondition.hpp" />
     <ClInclude Include="Includes\BehaviorTree\Details\IntegerCondition.hpp" />
     <ClInclude Include="Includes\BehaviorTree\Details\PrioritySelector.hpp" />
+    <ClInclude Include="Includes\BehaviorTree\Details\Private\DecimalConditionEnabler.hpp" />
+    <ClInclude Include="Includes\BehaviorTree\Details\Private\IntegerConditionEnabler.hpp" />
     <ClInclude Include="Includes\BehaviorTree\Details\ProbabilitySelector.hpp" />
     <ClInclude Include="Includes\BehaviorTree\Details\RandomSelector.hpp" />
     <ClInclude Include="Includes\BehaviorTree\Details\RepeatDecorator.hpp" />

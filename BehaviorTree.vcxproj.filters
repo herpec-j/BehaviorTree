@@ -16,6 +16,9 @@
     <Filter Include="Header Files\Details">
       <UniqueIdentifier>{81653573-e6e5-4c5a-ab02-69534d277e68}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Details\Private">
+      <UniqueIdentifier>{ad860c56-8677-49fc-93de-eecd2c409c3d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Includes\BehaviorTree\BehaviorTree.hpp">
@@ -101,6 +104,12 @@
     </ClInclude>
     <ClInclude Include="Includes\BehaviorTree\Details\RunningAfterDecorator.hpp">
       <Filter>Header Files\Details</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\Private\IntegerConditionEnabler.hpp">
+      <Filter>Header Files\Details\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes\BehaviorTree\Details\Private\DecimalConditionEnabler.hpp">
+      <Filter>Header Files\Details\Private</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
