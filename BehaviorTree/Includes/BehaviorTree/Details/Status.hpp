@@ -6,14 +6,17 @@ namespace AO
 {
 	namespace BehaviorTree
 	{
-		namespace Details
+		inline namespace Version_1
 		{
-			enum class Status : std::uint8_t
+			namespace Details
 			{
-				Success,
-				Failure,
-				Running
-			};
+				enum class Status : std::uint8_t
+				{
+					Success,
+					Failure,
+					Running
+				};
+			}
 		}
 	}
 }

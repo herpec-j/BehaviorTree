@@ -6,17 +6,20 @@ namespace AO
 {
 	namespace BehaviorTree
 	{
-		namespace Details
+		inline namespace Version_1
 		{
-			enum class ConditionTest : std::uint8_t
+			namespace Details
 			{
-				LessThan,
-				GreaterThan,
-				LessOrEqualThan,
-				GreaterOrEqualThan,
-				Equal,
-				NotEqual
-			};
+				enum class ConditionTest : std::uint8_t
+				{
+					LessThan,
+					GreaterThan,
+					LessOrEqualThan,
+					GreaterOrEqualThan,
+					Equal,
+					NotEqual
+				};
+			}
 		}
 	}
 }

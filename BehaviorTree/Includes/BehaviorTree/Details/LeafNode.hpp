@@ -8,42 +8,45 @@ namespace AO
 {
 	namespace BehaviorTree
 	{
-		namespace Details
+		inline namespace Version_1
 		{
-			template <class Entity, typename... Args>
-			class CompositeNode;
-
-			template <class Entity, typename... Args>
-			class LeafNode : public RootNode<Entity, Args...>
+			namespace Details
 			{
-				friend class CompositeNode < Entity, Args... > ;
+				template <class Entity, typename... Args>
+				class CompositeNode;
 
-			protected:
-				using EntityType = typename RootNode<Entity, Args... >::EntityType;
-				using EntityPtr = typename RootNode<Entity, Args... >::EntityPtr;
-				using Parent = CompositeNode<Entity, Args...>;
-				using ParentPtr = std::shared_ptr<Parent>;
-
-				LeafNode(void) = default;
-				LeafNode(const LeafNode &other) = default;
-				LeafNode &operator=(const LeafNode &other) = default;
-
-				virtual void onParentAdded(ParentPtr)
+				template <class Entity, typename... Args>
+				class LeafNode : public RootNode < Entity, Args... >
 				{
-					return;
-				}
+					friend class CompositeNode < Entity, Args... > ;
 
-				virtual void onParentRemoved(ParentPtr)
-				{
-					return;
-				}
+				protected:
+					using EntityType = typename RootNode<Entity, Args... >::EntityType;
+					using EntityPtr = typename RootNode<Entity, Args... >::EntityPtr;
+					using Parent = CompositeNode < Entity, Args... > ;
+					using ParentPtr = std::shared_ptr < Parent > ;
 
-			public:
-				virtual ~LeafNode(void) = default;
+					LeafNode(void) = default;
+					LeafNode(const LeafNode &other) = default;
+					LeafNode &operator=(const LeafNode &other) = default;
 
-				virtual void initialize(EntityPtr entity) override = 0;
-				virtual Status execute(EntityPtr entity, Args... args) override = 0;
-			};
+					virtual void onParentAdded(ParentPtr)
+					{
+						return;
+					}
+
+					virtual void onParentRemoved(ParentPtr)
+					{
+						return;
+					}
+
+				public:
+					virtual ~LeafNode(void) = default;
+
+					virtual void initialize(EntityPtr entity) override = 0;
+					virtual Status execute(EntityPtr entity, Args... args) override = 0;
+				};
+			}
 		}
 	}
 }

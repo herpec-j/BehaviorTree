@@ -6,36 +6,39 @@ namespace AO
 {
 	namespace BehaviorTree
 	{
-		namespace Details
+		inline namespace Version_1
 		{
-			template <class Entity, typename... Args>
-			class ConditionNode : public LeafNode < Entity, Args... >
+			namespace Details
 			{
-			public:
-				virtual ~ConditionNode(void) = default;
-
-			protected:
-				using EntityType = typename LeafNode<Entity, Args...>::EntityType;
-				using EntityPtr = typename LeafNode<Entity, Args...>::EntityPtr;
-				using Parent = typename LeafNode<Entity, Args...>::Parent;
-				using ParentPtr = typename LeafNode<Entity, Args...>::ParentPtr;
-
-				ConditionNode(void) = default;
-				ConditionNode(const ConditionNode &other) = default;
-				ConditionNode &operator=(const ConditionNode &other) = default;
-
-				virtual void initialize(EntityPtr) override final
+				template <class Entity, typename... Args>
+				class ConditionNode : public LeafNode < Entity, Args... >
 				{
-					return;
-				}
+				public:
+					virtual ~ConditionNode(void) = default;
 
-				virtual Status execute(EntityPtr entity, Args... args) override final
-				{
-					return decide(entity, args...);
-				}
+				protected:
+					using EntityType = typename LeafNode<Entity, Args...>::EntityType;
+					using EntityPtr = typename LeafNode<Entity, Args...>::EntityPtr;
+					using Parent = typename LeafNode<Entity, Args...>::Parent;
+					using ParentPtr = typename LeafNode<Entity, Args...>::ParentPtr;
 
-				virtual Status decide(EntityPtr entity, Args... args) = 0;
-			};
+					ConditionNode(void) = default;
+					ConditionNode(const ConditionNode &other) = default;
+					ConditionNode &operator=(const ConditionNode &other) = default;
+
+					virtual void initialize(EntityPtr) override final
+					{
+						return;
+					}
+
+					virtual Status execute(EntityPtr entity, Args... args) override final
+					{
+						return decide(entity, args...);
+					}
+
+					virtual Status decide(EntityPtr entity, Args... args) = 0;
+				};
+			}
 		}
 	}
 }

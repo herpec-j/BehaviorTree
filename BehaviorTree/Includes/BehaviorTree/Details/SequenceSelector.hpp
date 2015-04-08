@@ -6,107 +6,110 @@ namespace AO
 {
 	namespace BehaviorTree
 	{
-		namespace Details
+		inline namespace Version_1
 		{
-			template < class Entity, typename... Args >
-			class SequenceSelector final : public CompositeNode<Entity, Args...>
+			namespace Details
 			{
-			private:
-				using EntityType = typename CompositeNode<Entity, Args...>::EntityType;
-				using EntityPtr = typename CompositeNode<Entity, Args...>::EntityPtr;
-				using Parent = typename CompositeNode<Entity, Args...>::Parent;
-				using ParentPtr = typename CompositeNode<Entity, Args...>::ParentPtr;
-				using Child = typename CompositeNode<Entity, Args...>::Child;
-				using ChildPtr = typename CompositeNode<Entity, Args...>::ChildPtr;
-				using ChildrenList = typename CompositeNode<Entity, Args...>::ChildrenList;
-
-				static const std::size_t InitialPosition = -1;
-
-				std::size_t currentPosition = InitialPosition;
-
-			public:
-				SequenceSelector(void) = default;
-
-				SequenceSelector(const SequenceSelector &other)
-					: CompositeNode<Entity, Args...>(other), currentPosition(other.currentPosition)
+				template < class Entity, typename... Args >
+				class SequenceSelector final : public CompositeNode < Entity, Args... >
 				{
-					return;
-				}
+				private:
+					using EntityType = typename CompositeNode<Entity, Args...>::EntityType;
+					using EntityPtr = typename CompositeNode<Entity, Args...>::EntityPtr;
+					using Parent = typename CompositeNode<Entity, Args...>::Parent;
+					using ParentPtr = typename CompositeNode<Entity, Args...>::ParentPtr;
+					using Child = typename CompositeNode<Entity, Args...>::Child;
+					using ChildPtr = typename CompositeNode<Entity, Args...>::ChildPtr;
+					using ChildrenList = typename CompositeNode<Entity, Args...>::ChildrenList;
 
-				SequenceSelector(SequenceSelector &&other)
-					: CompositeNode<Entity, Args...>(std::move(other)), currentPosition(other.currentPosition)
-				{
-					other.currentPosition = InitialPosition;
-				}
+					static const std::size_t InitialPosition = -1;
 
-				SequenceSelector &operator=(const SequenceSelector &other)
-				{
-					if (this != &other)
+					std::size_t currentPosition = InitialPosition;
+
+				public:
+					SequenceSelector(void) = default;
+
+					SequenceSelector(const SequenceSelector &other)
+						: CompositeNode<Entity, Args...>(other), currentPosition(other.currentPosition)
 					{
-						CompositeNode<Entity, Args...>::operator=(other);
-						currentPosition = other.currentPosition;
+						return;
 					}
-					return *this;
-				}
 
-				SequenceSelector &operator=(SequenceSelector &&other)
-				{
-					if (this != &other)
+					SequenceSelector(SequenceSelector &&other)
+						: CompositeNode<Entity, Args...>(std::move(other)), currentPosition(other.currentPosition)
 					{
-						CompositeNode<Entity, Args...>::operator=(std::move(other));
-						currentPosition = other.currentPosition;
-						other.currentPosition = 0;
+						other.currentPosition = InitialPosition;
 					}
-					return *this;
-				}
 
-				virtual ~SequenceSelector(void) = default;
-
-			protected:
-				virtual void initialize(EntityPtr entity) override final
-				{
-					currentPosition = InitialPosition;
-					for (auto &child : this->children)
+					SequenceSelector &operator=(const SequenceSelector &other)
 					{
-						child->initialize(entity);
-					}
-				}
-
-				virtual Status execute(EntityPtr entity, Args... args) override final
-				{
-					if (currentPosition == InitialPosition)
-					{
-						initialize(entity);
-						currentPosition = 0;
-					}
-					if (this->children.empty())
-					{
-						return Status::Success;
-					}
-					ChildPtr currentTask = this->children[currentPosition];
-					Status result = currentTask->execute(entity, args...);
-					const std::size_t lastPosition = this->children.size() - 1;
-					while (result == Status::Success)
-					{
-						if (currentPosition == lastPosition)
+						if (this != &other)
 						{
-							currentPosition = InitialPosition;
-							return Status::Success;
+							CompositeNode<Entity, Args...>::operator=(other);
+							currentPosition = other.currentPosition;
 						}
-						else
-						{
-							++currentPosition;
-							currentTask = this->children[currentPosition];
-							result = currentTask->execute(entity, args...);
-						}
+						return *this;
 					}
-					if (result == Status::Failure)
+
+					SequenceSelector &operator=(SequenceSelector &&other)
+					{
+						if (this != &other)
+						{
+							CompositeNode<Entity, Args...>::operator=(std::move(other));
+							currentPosition = other.currentPosition;
+							other.currentPosition = 0;
+						}
+						return *this;
+					}
+
+					virtual ~SequenceSelector(void) = default;
+
+				protected:
+					virtual void initialize(EntityPtr entity) override final
 					{
 						currentPosition = InitialPosition;
+						for (auto &child : this->children)
+						{
+							child->initialize(entity);
+						}
 					}
-					return result;
-				}
-			};
+
+					virtual Status execute(EntityPtr entity, Args... args) override final
+					{
+						if (currentPosition == InitialPosition)
+						{
+							initialize(entity);
+							currentPosition = 0;
+						}
+						if (this->children.empty())
+						{
+							return Status::Success;
+						}
+						ChildPtr currentTask = this->children[currentPosition];
+						Status result = currentTask->execute(entity, args...);
+						const std::size_t lastPosition = this->children.size() - 1;
+						while (result == Status::Success)
+						{
+							if (currentPosition == lastPosition)
+							{
+								currentPosition = InitialPosition;
+								return Status::Success;
+							}
+							else
+							{
+								++currentPosition;
+								currentTask = this->children[currentPosition];
+								result = currentTask->execute(entity, args...);
+							}
+						}
+						if (result == Status::Failure)
+						{
+							currentPosition = InitialPosition;
+						}
+						return result;
+					}
+				};
+			}
 		}
 	}
 }

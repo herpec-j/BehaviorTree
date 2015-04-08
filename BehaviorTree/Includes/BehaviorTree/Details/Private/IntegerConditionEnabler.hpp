@@ -6,19 +6,22 @@ namespace AO
 {
 	namespace BehaviorTree
 	{
-		namespace Details
+		inline namespace Version_1
 		{
-			namespace Private
+			namespace Details
 			{
-				template <typename IntegerType, class = typename std::enable_if<std::is_integral<IntegerType>::value && !std::is_same<IntegerType, bool>::value>::type>
-				class IntegerConditionEnabler
+				namespace Private
 				{
-				public:
-					IntegerConditionEnabler(void) = default;
-					IntegerConditionEnabler(const IntegerConditionEnabler &other) = default;
-					IntegerConditionEnabler &operator=(const IntegerConditionEnabler &other) = default;
-					virtual ~IntegerConditionEnabler(void) = default;
-				};
+					template <typename IntegerType, class = typename std::enable_if<std::is_integral<IntegerType>::value && !std::is_same<IntegerType, bool>::value>::type>
+					class IntegerConditionEnabler
+					{
+					public:
+						IntegerConditionEnabler(void) = default;
+						IntegerConditionEnabler(const IntegerConditionEnabler &other) = default;
+						IntegerConditionEnabler &operator=(const IntegerConditionEnabler &other) = default;
+						virtual ~IntegerConditionEnabler(void) = default;
+					};
+				}
 			}
 		}
 	}

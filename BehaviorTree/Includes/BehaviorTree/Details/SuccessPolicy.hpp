@@ -6,13 +6,16 @@ namespace AO
 {
 	namespace BehaviorTree
 	{
-		namespace Details
+		inline namespace Version_1
 		{
-			enum class SuccessPolicy : std::uint8_t
+			namespace Details
 			{
-				SuccessOnOne,
-				SuccessOnAll
-			};
+				enum class SuccessPolicy : std::uint8_t
+				{
+					SuccessOnOne,
+					SuccessOnAll
+				};
+			}
 		}
 	}
 }

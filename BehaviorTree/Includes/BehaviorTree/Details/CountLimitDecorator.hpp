@@ -6,113 +6,116 @@ namespace AO
 {
 	namespace BehaviorTree
 	{
-		namespace Details
+		inline namespace Version_1
 		{
-			template < class Entity, typename... Args >
-			class CountLimitDecorator final : public DecoratorNode<Entity, Args...>
+			namespace Details
 			{
-			private:
-				using EntityType = typename DecoratorNode<Entity, Args...>::EntityType;
-				using EntityPtr = typename DecoratorNode<Entity, Args...>::EntityPtr;
-				using Parent = typename DecoratorNode<Entity, Args...>::Parent;
-				using ParentPtr = typename DecoratorNode<Entity, Args...>::ParentPtr;
-				using Child = typename DecoratorNode<Entity, Args...>::Child;
-				using ChildPtr = typename DecoratorNode<Entity, Args...>::ChildPtr;
-				using ChildrenList = typename DecoratorNode<Entity, Args...>::ChildrenList;
-
-				std::size_t limit;
-				std::size_t currentRepetition = 0;
-				bool allowReinitialize;
-
-			public:
-				CountLimitDecorator(void) = delete;
-
-				CountLimitDecorator(std::size_t limit, bool allowReinitialize = true)
-					: DecoratorNode<Entity, Args...>(), limit(limit), allowReinitialize(allowReinitialize)
+				template < class Entity, typename... Args >
+				class CountLimitDecorator final : public DecoratorNode < Entity, Args... >
 				{
-					return;
-				}
+				private:
+					using EntityType = typename DecoratorNode<Entity, Args...>::EntityType;
+					using EntityPtr = typename DecoratorNode<Entity, Args...>::EntityPtr;
+					using Parent = typename DecoratorNode<Entity, Args...>::Parent;
+					using ParentPtr = typename DecoratorNode<Entity, Args...>::ParentPtr;
+					using Child = typename DecoratorNode<Entity, Args...>::Child;
+					using ChildPtr = typename DecoratorNode<Entity, Args...>::ChildPtr;
+					using ChildrenList = typename DecoratorNode<Entity, Args...>::ChildrenList;
 
-				CountLimitDecorator(const CountLimitDecorator &other)
-					: DecoratorNode<Entity, Args...>(other), limit(other.limit), currentRepetition(other.currentRepetition), allowReinitialize(other.allowReinitialize)
-				{
-					return;
-				}
+					std::size_t limit;
+					std::size_t currentRepetition = 0;
+					bool allowReinitialize;
 
-				CountLimitDecorator(CountLimitDecorator &&other)
-					: DecoratorNode<Entity, Args...>(std::move(other)), limit(other.limit), currentRepetition(other.currentRepetition), allowReinitialize(other.allowReinitialize)
-				{
-					other.limit = 0;
-					other.currentRepetition = 0;
-				}
+				public:
+					CountLimitDecorator(void) = delete;
 
-				CountLimitDecorator &operator=(const CountLimitDecorator &other)
-				{
-					if (this != &other)
+					CountLimitDecorator(std::size_t limit, bool allowReinitialize = true)
+						: DecoratorNode<Entity, Args...>(), limit(limit), allowReinitialize(allowReinitialize)
 					{
-						DecoratorNode<Entity, Args...>::operator=(other);
-						limit = other.limit;
-						currentRepetition = other.currentRepetition;
-						allowReinitialize = other.allowReinitialize;
+						return;
 					}
-					return *this;
-				}
 
-				CountLimitDecorator &operator=(CountLimitDecorator &&other)
-				{
-					if (this != &other)
+					CountLimitDecorator(const CountLimitDecorator &other)
+						: DecoratorNode<Entity, Args...>(other), limit(other.limit), currentRepetition(other.currentRepetition), allowReinitialize(other.allowReinitialize)
 					{
-						DecoratorNode<Entity, Args...>::operator=(std::move(other));
-						limit = other.limit;
+						return;
+					}
+
+					CountLimitDecorator(CountLimitDecorator &&other)
+						: DecoratorNode<Entity, Args...>(std::move(other)), limit(other.limit), currentRepetition(other.currentRepetition), allowReinitialize(other.allowReinitialize)
+					{
 						other.limit = 0;
-						currentRepetition = other.currentRepetition;
 						other.currentRepetition = 0;
-						allowReinitialize = other.allowReinitialize;
 					}
-					return *this;
-				}
 
-				virtual ~CountLimitDecorator(void) = default;
+					CountLimitDecorator &operator=(const CountLimitDecorator &other)
+					{
+						if (this != &other)
+						{
+							DecoratorNode<Entity, Args...>::operator=(other);
+							limit = other.limit;
+							currentRepetition = other.currentRepetition;
+							allowReinitialize = other.allowReinitialize;
+						}
+						return *this;
+					}
 
-			protected:
-				virtual void initialize(EntityPtr entity) override final
-				{
-					if (allowReinitialize)
+					CountLimitDecorator &operator=(CountLimitDecorator &&other)
 					{
-						currentRepetition = 0;
+						if (this != &other)
+						{
+							DecoratorNode<Entity, Args...>::operator=(std::move(other));
+							limit = other.limit;
+							other.limit = 0;
+							currentRepetition = other.currentRepetition;
+							other.currentRepetition = 0;
+							allowReinitialize = other.allowReinitialize;
+						}
+						return *this;
 					}
-					if (!this->children.empty())
-					{
-						this->children.front()->initialize(entity);
-					}
-				}
 
-				virtual Status filter(EntityPtr entity, Args... args) override final
-				{
-					if (currentRepetition == limit)
+					virtual ~CountLimitDecorator(void) = default;
+
+				protected:
+					virtual void initialize(EntityPtr entity) override final
 					{
-						return Status::Failure;
+						if (allowReinitialize)
+						{
+							currentRepetition = 0;
+						}
+						if (!this->children.empty())
+						{
+							this->children.front()->initialize(entity);
+						}
 					}
-					else if (this->children.empty())
+
+					virtual Status filter(EntityPtr entity, Args... args) override final
 					{
-						++currentRepetition;
-						return Status::Success;
-					}
-					else
-					{
-						const Status status = this->children.front()->execute(entity, args...);
-						if (status == Status::Success || status == Status::Failure)
+						if (currentRepetition == limit)
+						{
+							return Status::Failure;
+						}
+						else if (this->children.empty())
 						{
 							++currentRepetition;
-							if (!this->children.empty())
-							{
-								this->children.front()->initialize(entity);
-							}
+							return Status::Success;
 						}
-						return status;
+						else
+						{
+							const Status status = this->children.front()->execute(entity, args...);
+							if (status == Status::Success || status == Status::Failure)
+							{
+								++currentRepetition;
+								if (!this->children.empty())
+								{
+									this->children.front()->initialize(entity);
+								}
+							}
+							return status;
+						}
 					}
-				}
-			};
+				};
+			}
 		}
 	}
 }

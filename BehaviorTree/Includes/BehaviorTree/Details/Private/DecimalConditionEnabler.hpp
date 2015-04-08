@@ -6,19 +6,22 @@ namespace AO
 {
 	namespace BehaviorTree
 	{
-		namespace Details
+		inline namespace Version_1
 		{
-			namespace Private
+			namespace Details
 			{
-				template < typename DecimalType, class = typename std::enable_if<std::is_floating_point<DecimalType>::value>::type>
-				class DecimalConditionEnabler
+				namespace Private
 				{
-				public:
-					DecimalConditionEnabler(void) = default;
-					DecimalConditionEnabler(const DecimalConditionEnabler &other) = default;
-					DecimalConditionEnabler &operator=(const DecimalConditionEnabler &other) = default;
-					virtual ~DecimalConditionEnabler(void) = default;
-				};
+					template < typename DecimalType, class = typename std::enable_if<std::is_floating_point<DecimalType>::value>::type>
+					class DecimalConditionEnabler
+					{
+					public:
+						DecimalConditionEnabler(void) = default;
+						DecimalConditionEnabler(const DecimalConditionEnabler &other) = default;
+						DecimalConditionEnabler &operator=(const DecimalConditionEnabler &other) = default;
+						virtual ~DecimalConditionEnabler(void) = default;
+					};
+				}
 			}
 		}
 	}

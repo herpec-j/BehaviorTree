@@ -9,70 +9,73 @@ namespace AO
 {
 	namespace BehaviorTree
 	{
-		namespace Details
+		inline namespace Version_1
 		{
-			template < class Entity, typename... Args >
-			class FunctionCondition final : public ConditionNode<Entity, Args...>
+			namespace Details
 			{
-			private:
-				using EntityType = typename ConditionNode<Entity, Args...>::EntityType;
-				using EntityPtr = typename ConditionNode<Entity, Args...>::EntityPtr;
-				using Parent = typename ConditionNode<Entity, Args...>::Parent;
-				using ParentPtr = typename ConditionNode<Entity, Args...>::ParentPtr;
-				using Function = std::function < Status(EntityPtr, Args...) >;
-
-			public:
-				FunctionCondition(void) = delete;
-
-				FunctionCondition(const Function &function)
-					: ConditionNode<Entity, Args...>(), function(function)
+				template < class Entity, typename... Args >
+				class FunctionCondition final : public ConditionNode < Entity, Args... >
 				{
-					assert(function && "Invalid function");
-				}
+				private:
+					using EntityType = typename ConditionNode<Entity, Args...>::EntityType;
+					using EntityPtr = typename ConditionNode<Entity, Args...>::EntityPtr;
+					using Parent = typename ConditionNode<Entity, Args...>::Parent;
+					using ParentPtr = typename ConditionNode<Entity, Args...>::ParentPtr;
+					using Function = std::function < Status(EntityPtr, Args...) > ;
 
-				FunctionCondition(const FunctionCondition &other)
-					: ConditionNode<Entity, Args...>(other), function(other.function)
-				{
-					return;
-				}
+				public:
+					FunctionCondition(void) = delete;
 
-				FunctionCondition(FunctionCondition &&other)
-					: ConditionNode<Entity, Args...>(std::move(other)), function(std::move(other.function))
-				{
-					return;
-				}
-
-				FunctionCondition &operator=(const FunctionCondition &other)
-				{
-					if (this != &other)
+					FunctionCondition(const Function &function)
+						: ConditionNode<Entity, Args...>(), function(function)
 					{
-						ConditionNode<Entity, Args...>::operator=(other);
-						function = other.function;
+						assert(function && "Invalid function");
 					}
-					return *this;
-				}
 
-				FunctionCondition &operator=(FunctionCondition &&other)
-				{
-					if (this != &other)
+					FunctionCondition(const FunctionCondition &other)
+						: ConditionNode<Entity, Args...>(other), function(other.function)
 					{
-						ConditionNode<Entity, Args...>::operator=(std::move(other));
-						function = std::move(other.function);
+						return;
 					}
-					return *this;
-				}
 
-				virtual ~FunctionCondition(void) = default;
+					FunctionCondition(FunctionCondition &&other)
+						: ConditionNode<Entity, Args...>(std::move(other)), function(std::move(other.function))
+					{
+						return;
+					}
 
-			protected:
-				virtual Status decide(EntityPtr entity, Args... args) override final
-				{
-					return function(entity, args...);
-				}
+					FunctionCondition &operator=(const FunctionCondition &other)
+					{
+						if (this != &other)
+						{
+							ConditionNode<Entity, Args...>::operator=(other);
+							function = other.function;
+						}
+						return *this;
+					}
 
-			private:
-				Function function;
-			};
+					FunctionCondition &operator=(FunctionCondition &&other)
+					{
+						if (this != &other)
+						{
+							ConditionNode<Entity, Args...>::operator=(std::move(other));
+							function = std::move(other.function);
+						}
+						return *this;
+					}
+
+					virtual ~FunctionCondition(void) = default;
+
+				protected:
+					virtual Status decide(EntityPtr entity, Args... args) override final
+					{
+						return function(entity, args...);
+					}
+
+				private:
+					Function function;
+				};
+			}
 		}
 	}
 }

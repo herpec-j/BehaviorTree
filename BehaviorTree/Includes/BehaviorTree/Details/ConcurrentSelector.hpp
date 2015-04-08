@@ -10,172 +10,175 @@ namespace AO
 {
 	namespace BehaviorTree
 	{
-		namespace Details
+		inline namespace Version_1
 		{
-			template < class Entity, typename... Args >
-			class ConcurrentSelector final : public CompositeNode<Entity, Args...>
+			namespace Details
 			{
-			private:
-				using EntityType = typename CompositeNode<Entity, Args...>::EntityType;
-				using EntityPtr = typename CompositeNode<Entity, Args...>::EntityPtr;
-				using Parent = typename CompositeNode<Entity, Args...>::Parent;
-				using ParentPtr = typename CompositeNode<Entity, Args...>::ParentPtr;
-				using Child = typename CompositeNode<Entity, Args...>::Child;
-				using ChildPtr = typename CompositeNode<Entity, Args...>::ChildPtr;
-				using ChildrenList = typename CompositeNode<Entity, Args...>::ChildrenList;
-				using ChildrenStatusMap = std::unordered_map < ChildPtr, Status > ;
-
-				FailurePolicy failPolicy;
-				SuccessPolicy succeedPolicy;
-				ChildrenStatusMap childrenStatus;
-
-			public:
-				ConcurrentSelector(FailurePolicy failPolicy = FailurePolicy::FailOnAll, SuccessPolicy succeedPolicy = SuccessPolicy::SuccessOnAll)
-					: CompositeNode<Entity, Args...>(), failPolicy(failPolicy), succeedPolicy(succeedPolicy)
+				template < class Entity, typename... Args >
+				class ConcurrentSelector final : public CompositeNode < Entity, Args... >
 				{
-					return;
-				}
+				private:
+					using EntityType = typename CompositeNode<Entity, Args...>::EntityType;
+					using EntityPtr = typename CompositeNode<Entity, Args...>::EntityPtr;
+					using Parent = typename CompositeNode<Entity, Args...>::Parent;
+					using ParentPtr = typename CompositeNode<Entity, Args...>::ParentPtr;
+					using Child = typename CompositeNode<Entity, Args...>::Child;
+					using ChildPtr = typename CompositeNode<Entity, Args...>::ChildPtr;
+					using ChildrenList = typename CompositeNode<Entity, Args...>::ChildrenList;
+					using ChildrenStatusMap = std::unordered_map < ChildPtr, Status > ;
 
-				ConcurrentSelector(const ConcurrentSelector &other)
-					: CompositeNode<Entity, Args...>(other), failPolicy(other.failPolicy), succeedPolicy(other.succeedPolicy), childrenStatus(other.childrenStatus)
-				{
-					return;
-				}
+					FailurePolicy failPolicy;
+					SuccessPolicy succeedPolicy;
+					ChildrenStatusMap childrenStatus;
 
-				ConcurrentSelector(ConcurrentSelector &&other)
-					: CompositeNode<Entity, Args...>(std::move(other)), failPolicy(other.failPolicy), succeedPolicy(other.succeedPolicy), childrenStatus(std::move(other.childrenStatus))
-				{
-					return;
-				}
-
-				ConcurrentSelector &operator=(const ConcurrentSelector &other)
-				{
-					if (this != &other)
+				public:
+					ConcurrentSelector(FailurePolicy failPolicy = FailurePolicy::FailOnAll, SuccessPolicy succeedPolicy = SuccessPolicy::SuccessOnAll)
+						: CompositeNode<Entity, Args...>(), failPolicy(failPolicy), succeedPolicy(succeedPolicy)
 					{
-						CompositeNode<Entity, Args...>::operator=(other);
-						failPolicy = other.failPolicy;
-						succeedPolicy = other.succeedPolicy;
-						childrenStatus = other.childrenStatus;
+						return;
 					}
-					return *this;
-				}
 
-				ConcurrentSelector &operator=(ConcurrentSelector &&other)
-				{
-					if (this != &other)
+					ConcurrentSelector(const ConcurrentSelector &other)
+						: CompositeNode<Entity, Args...>(other), failPolicy(other.failPolicy), succeedPolicy(other.succeedPolicy), childrenStatus(other.childrenStatus)
 					{
-						CompositeNode<Entity, Args...>::operator=(std::move(other));
-						failPolicy = other.failPolicy;
-						succeedPolicy = other.succeedPolicy;
-						childrenStatus = std::move(other.childrenStatus);
+						return;
 					}
-					return *this;
-				}
 
-				virtual ~ConcurrentSelector(void) = default;
-
-			protected:
-				virtual void initialize(EntityPtr entity) override final
-				{
-					childrenStatus.clear();
-					for (auto &child : this->children)
+					ConcurrentSelector(ConcurrentSelector &&other)
+						: CompositeNode<Entity, Args...>(std::move(other)), failPolicy(other.failPolicy), succeedPolicy(other.succeedPolicy), childrenStatus(std::move(other.childrenStatus))
 					{
-						child->initialize(entity);
-						childrenStatus.insert(std::make_pair(child, Status::Running));
+						return;
 					}
-				}
 
-				virtual Status execute(EntityPtr entity, Args... args) override final
-				{
-					if (childrenStatus.empty())
+					ConcurrentSelector &operator=(const ConcurrentSelector &other)
 					{
-						initialize(entity);
-					}
-					for (auto &child : this->children)
-					{
-						if (childrenStatus[child] == Status::Running)
+						if (this != &other)
 						{
-							const Status status = child->execute(entity, args...);
-							if (status == Status::Failure)
+							CompositeNode<Entity, Args...>::operator=(other);
+							failPolicy = other.failPolicy;
+							succeedPolicy = other.succeedPolicy;
+							childrenStatus = other.childrenStatus;
+						}
+						return *this;
+					}
+
+					ConcurrentSelector &operator=(ConcurrentSelector &&other)
+					{
+						if (this != &other)
+						{
+							CompositeNode<Entity, Args...>::operator=(std::move(other));
+							failPolicy = other.failPolicy;
+							succeedPolicy = other.succeedPolicy;
+							childrenStatus = std::move(other.childrenStatus);
+						}
+						return *this;
+					}
+
+					virtual ~ConcurrentSelector(void) = default;
+
+				protected:
+					virtual void initialize(EntityPtr entity) override final
+					{
+						childrenStatus.clear();
+						for (auto &child : this->children)
+						{
+							child->initialize(entity);
+							childrenStatus.insert(std::make_pair(child, Status::Running));
+						}
+					}
+
+					virtual Status execute(EntityPtr entity, Args... args) override final
+					{
+						if (childrenStatus.empty())
+						{
+							initialize(entity);
+						}
+						for (auto &child : this->children)
+						{
+							if (childrenStatus[child] == Status::Running)
 							{
-								if (failPolicy == FailurePolicy::FailOnOne)
+								const Status status = child->execute(entity, args...);
+								if (status == Status::Failure)
 								{
-									initialize(entity);
-									return Status::Failure;
+									if (failPolicy == FailurePolicy::FailOnOne)
+									{
+										initialize(entity);
+										return Status::Failure;
+									}
+									else
+									{
+										childrenStatus[child] = Status::Failure;
+									}
 								}
-								else
+								else if (status == Status::Success)
 								{
-									childrenStatus[child] = Status::Failure;
+									childrenStatus[child] = Status::Success;
 								}
 							}
-							else if (status == Status::Success)
+							if (childrenStatus[child] == Status::Failure && failPolicy == FailurePolicy::FailOnAll)
 							{
-								childrenStatus[child] = Status::Success;
+								childrenStatus[child] = child->execute(entity, args...);
 							}
 						}
-						if (childrenStatus[child] == Status::Failure && failPolicy == FailurePolicy::FailOnAll)
+						bool sawSuccess = false;
+						bool sawAllFails = true;
+						bool sawAllSuccess = true;
+						for (auto &pair : childrenStatus)
 						{
-							childrenStatus[child] = child->execute(entity, args...);
+							switch (pair.second)
+							{
+								case Status::Success:
+									if (succeedPolicy == SuccessPolicy::SuccessOnOne && failPolicy != FailurePolicy::FailOnOne)
+									{
+										initialize(entity);
+										return Status::Success;
+									}
+									else
+									{
+										sawSuccess = true;
+										sawAllFails = false;
+									}
+									break;
+								case Status::Failure:
+									if (failPolicy == FailurePolicy::FailOnOne)
+									{
+										initialize(entity);
+										return Status::Failure;
+									}
+									else
+									{
+										sawAllSuccess = false;
+									}
+									break;
+								case Status::Running:
+									if (failPolicy == FailurePolicy::FailOnAll && succeedPolicy == SuccessPolicy::SuccessOnAll)
+									{
+										return Status::Running;
+									}
+									sawAllFails = false;
+									sawAllSuccess = false;
+									break;
+								default:
+									break;
+							}
 						}
-					}
-					bool sawSuccess = false;
-					bool sawAllFails = true;
-					bool sawAllSuccess = true;
-					for (auto &pair : childrenStatus)
-					{
-						switch (pair.second)
+						if (failPolicy == FailurePolicy::FailOnAll && sawAllFails)
 						{
-						case Status::Success:
-							if (succeedPolicy == SuccessPolicy::SuccessOnOne && failPolicy != FailurePolicy::FailOnOne)
-							{
-								initialize(entity);
-								return Status::Success;
-							}
-							else
-							{
-								sawSuccess = true;
-								sawAllFails = false;
-							}
-							break;
-						case Status::Failure:
-							if (failPolicy == FailurePolicy::FailOnOne)
-							{
-								initialize(entity);
-								return Status::Failure;
-							}
-							else
-							{
-								sawAllSuccess = false;
-							}
-							break;
-						case Status::Running:
-							if (failPolicy == FailurePolicy::FailOnAll && succeedPolicy == SuccessPolicy::SuccessOnAll)
-							{
-								return Status::Running;
-							}
-							sawAllFails = false;
-							sawAllSuccess = false;
-							break;
-						default:
-							break;
+							initialize(entity);
+							return Status::Failure;
+						}
+						else if ((succeedPolicy == SuccessPolicy::SuccessOnAll && sawAllSuccess) || (succeedPolicy == SuccessPolicy::SuccessOnOne && sawSuccess))
+						{
+							initialize(entity);
+							return Status::Success;
+						}
+						else
+						{
+							return Status::Running;
 						}
 					}
-					if (failPolicy == FailurePolicy::FailOnAll && sawAllFails)
-					{
-						initialize(entity);
-						return Status::Failure;
-					}
-					else if ((succeedPolicy == SuccessPolicy::SuccessOnAll && sawAllSuccess) || (succeedPolicy == SuccessPolicy::SuccessOnOne && sawSuccess))
-					{
-						initialize(entity);
-						return Status::Success;
-					}
-					else
-					{
-						return Status::Running;
-					}
-				}
-			};
+				};
+			}
 		}
 	}
 }

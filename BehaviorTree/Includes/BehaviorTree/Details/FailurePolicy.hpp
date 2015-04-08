@@ -6,13 +6,16 @@ namespace AO
 {
 	namespace BehaviorTree
 	{
-		namespace Details
+		inline namespace Version_1
 		{
-			enum class FailurePolicy : std::uint8_t
+			namespace Details
 			{
-				FailOnOne,
-				FailOnAll
-			};
+				enum class FailurePolicy : std::uint8_t
+				{
+					FailOnOne,
+					FailOnAll
+				};
+			}
 		}
 	}
 }
