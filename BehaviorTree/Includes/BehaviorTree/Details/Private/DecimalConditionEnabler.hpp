@@ -16,9 +16,19 @@ namespace AO
 					class DecimalConditionEnabler
 					{
 					public:
+						// Constructors
 						DecimalConditionEnabler(void) = default;
-						DecimalConditionEnabler(const DecimalConditionEnabler &other) = default;
-						DecimalConditionEnabler &operator=(const DecimalConditionEnabler &other) = default;
+
+						DecimalConditionEnabler(DecimalConditionEnabler const &) = default;
+
+						DecimalConditionEnabler(DecimalConditionEnabler &&) = default;
+
+						// Assignment Operators
+						DecimalConditionEnabler &operator=(DecimalConditionEnabler const &) = default;
+
+						DecimalConditionEnabler &operator=(DecimalConditionEnabler &&) = default;
+
+						// Destructor
 						virtual ~DecimalConditionEnabler(void) = default;
 					};
 				}

@@ -15,21 +15,21 @@ namespace AO
 				{
 				private:
 					using EntityType = typename DecoratorNode<Entity, Args...>::EntityType;
+
 					using EntityPtr = typename DecoratorNode<Entity, Args...>::EntityPtr;
+
 					using Parent = typename DecoratorNode<Entity, Args...>::Parent;
+
 					using ParentPtr = typename DecoratorNode<Entity, Args...>::ParentPtr;
+
 					using Child = typename DecoratorNode<Entity, Args...>::Child;
+
 					using ChildPtr = typename DecoratorNode<Entity, Args...>::ChildPtr;
+
 					using ChildrenList = typename DecoratorNode<Entity, Args...>::ChildrenList;
 
-				public:
-					AlwaysFailureDecorator(void) = default;
-					AlwaysFailureDecorator(const AlwaysFailureDecorator &other) = default;
-					AlwaysFailureDecorator &operator=(const AlwaysFailureDecorator &other) = default;
-					virtual ~AlwaysFailureDecorator(void) = default;
-
-				protected:
-					virtual void initialize(EntityPtr entity) override final
+					// Inherited Methods
+					void initialize(EntityPtr entity) override final
 					{
 						if (!this->children.empty())
 						{
@@ -37,11 +37,11 @@ namespace AO
 						}
 					}
 
-					virtual Status filter(EntityPtr entity, Args... args) override final
+					Status filter(EntityPtr entity, Args... args) override final
 					{
 						if (!this->children.empty())
 						{
-							const Status status = this->children.front()->execute(entity, args...);
+							Status const status = this->children.front()->execute(entity, args...);
 							if (status == Status::Success || status == Status::Failure)
 							{
 								this->children.front()->initialize(entity);
@@ -49,6 +49,22 @@ namespace AO
 						}
 						return Status::Failure;
 					}
+
+				public:
+					// Constructors
+					AlwaysFailureDecorator(void) = default;
+
+					AlwaysFailureDecorator(AlwaysFailureDecorator const &) = default;
+
+					AlwaysFailureDecorator(AlwaysFailureDecorator &&) = default;
+
+					// Assignment Operators
+					AlwaysFailureDecorator &operator=(AlwaysFailureDecorator const &) = default;
+
+					AlwaysFailureDecorator &operator=(AlwaysFailureDecorator &&) = default;
+
+					// Destructor
+					~AlwaysFailureDecorator(void) = default;
 				};
 			}
 		}

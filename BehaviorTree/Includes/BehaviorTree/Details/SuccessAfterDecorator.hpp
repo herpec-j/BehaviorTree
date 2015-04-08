@@ -15,66 +15,26 @@ namespace AO
 				{
 				private:
 					using EntityType = typename DecoratorNode<Entity, Args...>::EntityType;
+
 					using EntityPtr = typename DecoratorNode<Entity, Args...>::EntityPtr;
+
 					using Parent = typename DecoratorNode<Entity, Args...>::Parent;
+
 					using ParentPtr = typename DecoratorNode<Entity, Args...>::ParentPtr;
+
 					using Child = typename DecoratorNode<Entity, Args...>::Child;
+
 					using ChildPtr = typename DecoratorNode<Entity, Args...>::ChildPtr;
+
 					using ChildrenList = typename DecoratorNode<Entity, Args...>::ChildrenList;
 
+					// Attributes
 					std::size_t total;
+
 					std::size_t count;
 
-				public:
-					SuccessAfterDecorator(void) = delete;
-
-					SuccessAfterDecorator(std::size_t total)
-						: DecoratorNode<Entity, Args...>(), total(total), count(total)
-					{
-						return;
-					}
-
-					SuccessAfterDecorator(const SuccessAfterDecorator &other)
-						: DecoratorNode<Entity, Args...>(other), total(other.total), count(other.count)
-					{
-						return;
-					}
-
-					SuccessAfterDecorator(SuccessAfterDecorator &&other)
-						: DecoratorNode<Entity, Args...>(std::move(other)), total(other.total), count(other.count)
-					{
-						other.total = 0;
-						other.count = 0;
-					}
-
-					SuccessAfterDecorator &operator=(const SuccessAfterDecorator &other)
-					{
-						if (this != &other)
-						{
-							DecoratorNode<Entity, Args...>::operator=(other);
-							total = other.total;
-							count = other.count;
-						}
-						return *this;
-					}
-
-					SuccessAfterDecorator &operator=(SuccessAfterDecorator &&other)
-					{
-						if (this != &other)
-						{
-							DecoratorNode<Entity, Args...>::operator=(std::move(other));
-							total = other.total;
-							other.total = 0;
-							count = other.count;
-							other.count = 0;
-						}
-						return *this;
-					}
-
-					virtual ~SuccessAfterDecorator(void) = default;
-
-				protected:
-					virtual void initialize(EntityPtr entity) override final
+					// Inherited Methods
+					void initialize(EntityPtr entity) override final
 					{
 						count = total;
 						if (!this->children.empty())
@@ -83,13 +43,13 @@ namespace AO
 						}
 					}
 
-					virtual Status filter(EntityPtr entity, Args... args) override final
+					Status filter(EntityPtr entity, Args... args) override final
 					{
 						if (count == 0)
 						{
 							if (!this->children.empty())
 							{
-								const Status status = this->children.front()->execute(entity, args...);
+								Status const status = this->children.front()->execute(entity, args...);
 								if (status == Status::Success || status == Status::Failure)
 								{
 									this->children.front()->initialize(entity);
@@ -102,7 +62,7 @@ namespace AO
 							--count;
 							if (!this->children.empty())
 							{
-								const Status status = this->children.front()->execute(entity, args...);
+								Status const status = this->children.front()->execute(entity, args...);
 								if (status == Status::Success || status == Status::Failure)
 								{
 									this->children.front()->initialize(entity);
@@ -112,6 +72,28 @@ namespace AO
 							return Status::Running;
 						}
 					}
+
+				public:
+					// Constructors
+					SuccessAfterDecorator(void) = delete;
+
+					SuccessAfterDecorator(std::size_t total)
+						: DecoratorNode<Entity, Args...>(), total(total), count(total)
+					{
+						return;
+					}
+
+					SuccessAfterDecorator(SuccessAfterDecorator const &) = default;
+
+					SuccessAfterDecorator(SuccessAfterDecorator &&) = default;
+
+					// Assignment Operators
+					SuccessAfterDecorator &operator=(SuccessAfterDecorator const &) = default;
+
+					SuccessAfterDecorator &operator=(SuccessAfterDecorator &&) = default;
+
+					// Destructor
+					~SuccessAfterDecorator(void) = default;
 				};
 			}
 		}

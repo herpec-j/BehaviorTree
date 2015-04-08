@@ -15,35 +15,53 @@ namespace AO
 				{
 				protected:
 					using EntityType = typename CompositeNode<Entity, Args...>::EntityType;
+
 					using EntityPtr = typename CompositeNode<Entity, Args...>::EntityPtr;
+
 					using Parent = typename CompositeNode<Entity, Args...>::Parent;
+
 					using ParentPtr = typename CompositeNode<Entity, Args...>::ParentPtr;
+
 					using Child = typename CompositeNode<Entity, Args...>::Child;
+
 					using ChildPtr = typename CompositeNode<Entity, Args...>::ChildPtr;
+
 					using ChildrenList = typename CompositeNode<Entity, Args...>::ChildrenList;
 
 				public:
+					// Destructor
 					virtual ~DecoratorNode(void) = default;
 
-					virtual ParentPtr addChild(ChildPtr child) override final
+					// Inherited Methods
+					ParentPtr addChild(ChildPtr child) override final
 					{
 						assert(this->children.empty() && "Tree should be empty");
 						return CompositeNode<Entity, Args...>::addChild(child);
 					}
 
 				protected:
+					// Constructors
 					DecoratorNode(void) = default;
-					DecoratorNode(const DecoratorNode &other) = default;
-					DecoratorNode &operator=(const DecoratorNode &other) = default;
 
+					DecoratorNode(DecoratorNode const &) = default;
+
+					DecoratorNode(DecoratorNode &&) = default;
+
+					// Assignment Operators
+					DecoratorNode &operator=(DecoratorNode const &) = default;
+
+					DecoratorNode &operator=(DecoratorNode &&) = default;
+
+					// Virtual Methods
 					virtual void initialize(EntityPtr) override = 0;
 
-					virtual Status execute(EntityPtr entity, Args... args) override final
+					virtual Status filter(EntityPtr entity, Args... args) = 0;
+
+					// Inherited Methods
+					Status execute(EntityPtr entity, Args... args) override final
 					{
 						return filter(entity, args...);
 					}
-
-					virtual Status filter(EntityPtr entity, Args... args) = 0;
 				};
 			}
 		}

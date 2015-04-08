@@ -15,16 +15,28 @@ namespace AO
 				{
 				protected:
 					using EntityType = Entity;
+
 					using EntityPtr = EntityType *;
 
+					// Constructors
 					RootNode(void) = default;
-					RootNode(const RootNode &other) = default;
-					RootNode &operator=(const RootNode &other) = default;
+
+					RootNode(RootNode const &) = default;
+
+					RootNode(RootNode &&) = default;
+
+					// Assignment Operators
+					RootNode &operator=(RootNode const &) = default;
+
+					RootNode &operator=(RootNode &&) = default;
 
 				public:
+					// Destructor
 					virtual ~RootNode(void) = default;
 
+					// Virtual Methods
 					virtual void initialize(EntityPtr entity) = 0;
+
 					virtual Status execute(EntityPtr entity, Args... args) = 0;
 				};
 			}

@@ -18,65 +18,52 @@ namespace AO
 				{
 				private:
 					using EntityType = typename ConditionNode<Entity, Args...>::EntityType;
+
 					using EntityPtr = typename ConditionNode<Entity, Args...>::EntityPtr;
+
 					using Parent = typename ConditionNode<Entity, Args...>::Parent;
+
 					using ParentPtr = typename ConditionNode<Entity, Args...>::ParentPtr;
+
 					using Function = std::function < bool(EntityPtr, Args...) > ;
 
+					// Attributes
+					Function function;
+
+					bool testValue;
+
+					// Inherited Methods
+					void initialize(EntityPtr) override final
+					{
+						return;
+					}
+
+					Status decide(EntityPtr entity, Args... args) override final
+					{
+						return function(entity, args...) == testValue ? Status::Success : Status::Failure;
+					}
+
 				public:
+					// Constructors
 					BooleanCondition(void) = delete;
 
-					BooleanCondition(const Function &function, bool testValue = true)
+					BooleanCondition(Function const &function, bool testValue = true)
 						: ConditionNode<Entity, Args...>(), function(function), testValue(testValue)
 					{
 						assert(function && "Invalid function");
 					}
 
-					BooleanCondition(const BooleanCondition &other)
-						: ConditionNode<Entity, Args...>(other), function(other.function), testValue(other.testValue)
-					{
-						return;
-					}
+					BooleanCondition(BooleanCondition const &) = default;
 
-					BooleanCondition(BooleanCondition &&other)
-						: ConditionNode<Entity, Args...>(std::move(other)), function(std::move(other.function)), testValue(other.testValue)
-					{
-						return;
-					}
+					BooleanCondition(BooleanCondition &&) = default;
 
-					BooleanCondition &operator=(const BooleanCondition &other)
-					{
-						if (this != &other)
-						{
-							ConditionNode<Entity, Args...>::operator=(other);
-							function = other.function;
-							testValue = other.testValue;
-						}
-						return *this;
-					}
+					// Assignment Operators
+					BooleanCondition &operator=(BooleanCondition const &) = default;
 
-					BooleanCondition &operator=(BooleanCondition &&other)
-					{
-						if (this != &other)
-						{
-							ConditionNode<Entity, Args...>::operator=(std::move(other));
-							function = std::move(other.function);
-							testValue = other.testValue;
-						}
-						return *this;
-					}
+					BooleanCondition &operator=(BooleanCondition &&) = default;
 
-					virtual ~BooleanCondition(void) = default;
-
-				protected:
-					virtual Status decide(EntityPtr entity, Args... args) override final
-					{
-						return function(entity, args...) == testValue ? Status::Success : Status::Failure;
-					}
-
-				private:
-					Function function;
-					bool testValue;
+					// Destructor
+					~BooleanCondition(void) = default;
 				};
 			}
 		}

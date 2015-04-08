@@ -53,6 +53,7 @@ namespace AO
 
 			// Policies
 			using FailurePolicy = Details::FailurePolicy;
+
 			using SuccessPolicy = Details::SuccessPolicy;
 
 			// Conditions
@@ -64,11 +65,13 @@ namespace AO
 			private:
 				// Root Nodes
 				using Root = typename Details::RootNode < Entity, Args... >;
+
 				using RootPtr = std::shared_ptr < Root >;
 
 			public:
 				// Entity Type
 				using EntityType = Entity;
+
 				using EntityPtr = EntityType *;
 
 				// Status
@@ -76,6 +79,7 @@ namespace AO
 
 				// Policies
 				using FailurePolicy = Details::FailurePolicy;
+
 				using SuccessPolicy = Details::SuccessPolicy;
 
 				// Conditions
@@ -83,33 +87,50 @@ namespace AO
 
 				// Base Nodes
 				using Action = typename Details::ActionNode < Entity, Args... >;
+
 				using Composite = typename Details::CompositeNode < Entity, Args... >;
+
 				using Condition = typename Details::ConditionNode < Entity, Args... >;
+
 				using Decorator = typename Details::DecoratorNode < Entity, Args... >;
 
 				// Condition Nodes
 				using FunctionCondition = typename Details::FunctionCondition < Entity, Args... >;
+
 				using BooleanCondition = typename Details::BooleanCondition < Entity, Args... >;
+
 				template <typename DecimalType>
 				using DecimalCondition = typename Details::DecimalCondition < DecimalType, Entity, Args... >;
+
 				template <typename IntegerType>
 				using IntegerCondition = typename Details::IntegerCondition < IntegerType, Entity, Args... >;
 
 				// Decorator Nodes
 				using AlwaysFailureDecorator = typename Details::AlwaysFailureDecorator < Entity, Args... >;
+
 				using AlwaysRunningDecorator = typename Details::AlwaysRunningDecorator < Entity, Args... >;
+
 				using AlwaysSuccessDecorator = typename Details::AlwaysSuccessDecorator < Entity, Args... >;
+
 				using FailureAfterDecorator = typename Details::FailureAfterDecorator < Entity, Args... >;
+
 				using RunningAfterDecorator = typename Details::RunningAfterDecorator < Entity, Args... >;
+
 				using SuccessAfterDecorator = typename Details::SuccessAfterDecorator < Entity, Args... >;
+
 				using CountLimitDecorator = typename Details::CountLimitDecorator < Entity, Args... >;
+
 				using RepeatDecorator = typename Details::RepeatDecorator < Entity, Args... >;
 
 				// Selector Nodes
 				using ConcurrentSelector = typename Details::ConcurrentSelector < Entity, Args... >;
+
 				using PrioritySelector = typename Details::PrioritySelector < Entity, Args... >;
+
 				using ProbabilitySelector = typename Details::ProbabilitySelector < Entity, Args... >;
+
 				using RandomSelector = typename Details::RandomSelector < Entity, Args... >;
+
 				using SequenceSelector = typename Details::SequenceSelector < Entity, Args... >;
 
 				// Constructors
@@ -122,39 +143,14 @@ namespace AO
 					assignBehavior<AlwaysRunningDecorator>();
 				}
 
-				BehaviorTree(const BehaviorTree &other)
-					: owner(other.owner), behavior(other.behavior)
-				{
-					return;
-				}
+				BehaviorTree(BehaviorTree const &) = default;
 
-				BehaviorTree(BehaviorTree &&other)
-					: owner(other.owner), behavior(std::move(other.behavior))
-				{
-					other.owner = nullptr;
-				}
+				BehaviorTree(BehaviorTree &&) = default;
 
 				// Assignment Operators
-				BehaviorTree &operator=(const BehaviorTree &other)
-				{
-					if (this != &other)
-					{
-						owner = other.owner;
-						behavior = other.behavior;
-					}
-					return *this;
-				}
+				BehaviorTree &operator=(BehaviorTree const &) = default;
 
-				BehaviorTree &operator=(BehaviorTree &&other)
-				{
-					if (this != &other)
-					{
-						owner = other.owner;
-						other.owner = nullptr;
-						behavior = std::move(other.behavior);
-					}
-					return *this;
-				}
+				BehaviorTree &operator=(BehaviorTree &&) = default;
 
 				// Destructor
 				virtual ~BehaviorTree(void) = default;
@@ -186,6 +182,7 @@ namespace AO
 			private:
 				// Attributes
 				EntityPtr owner;
+
 				RootPtr behavior;
 			};
 		}

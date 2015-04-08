@@ -15,69 +15,28 @@ namespace AO
 				{
 				private:
 					using EntityType = typename DecoratorNode<Entity, Args...>::EntityType;
+
 					using EntityPtr = typename DecoratorNode<Entity, Args...>::EntityPtr;
+
 					using Parent = typename DecoratorNode<Entity, Args...>::Parent;
+
 					using ParentPtr = typename DecoratorNode<Entity, Args...>::ParentPtr;
+
 					using Child = typename DecoratorNode<Entity, Args...>::Child;
+
 					using ChildPtr = typename DecoratorNode<Entity, Args...>::ChildPtr;
+
 					using ChildrenList = typename DecoratorNode<Entity, Args...>::ChildrenList;
 
+					// Attributes
 					std::size_t limit;
+
 					std::size_t currentRepetition = 0;
+
 					bool allowReinitialize;
 
-				public:
-					CountLimitDecorator(void) = delete;
-
-					CountLimitDecorator(std::size_t limit, bool allowReinitialize = true)
-						: DecoratorNode<Entity, Args...>(), limit(limit), allowReinitialize(allowReinitialize)
-					{
-						return;
-					}
-
-					CountLimitDecorator(const CountLimitDecorator &other)
-						: DecoratorNode<Entity, Args...>(other), limit(other.limit), currentRepetition(other.currentRepetition), allowReinitialize(other.allowReinitialize)
-					{
-						return;
-					}
-
-					CountLimitDecorator(CountLimitDecorator &&other)
-						: DecoratorNode<Entity, Args...>(std::move(other)), limit(other.limit), currentRepetition(other.currentRepetition), allowReinitialize(other.allowReinitialize)
-					{
-						other.limit = 0;
-						other.currentRepetition = 0;
-					}
-
-					CountLimitDecorator &operator=(const CountLimitDecorator &other)
-					{
-						if (this != &other)
-						{
-							DecoratorNode<Entity, Args...>::operator=(other);
-							limit = other.limit;
-							currentRepetition = other.currentRepetition;
-							allowReinitialize = other.allowReinitialize;
-						}
-						return *this;
-					}
-
-					CountLimitDecorator &operator=(CountLimitDecorator &&other)
-					{
-						if (this != &other)
-						{
-							DecoratorNode<Entity, Args...>::operator=(std::move(other));
-							limit = other.limit;
-							other.limit = 0;
-							currentRepetition = other.currentRepetition;
-							other.currentRepetition = 0;
-							allowReinitialize = other.allowReinitialize;
-						}
-						return *this;
-					}
-
-					virtual ~CountLimitDecorator(void) = default;
-
-				protected:
-					virtual void initialize(EntityPtr entity) override final
+					// Inherited Methods
+					void initialize(EntityPtr entity) override final
 					{
 						if (allowReinitialize)
 						{
@@ -89,7 +48,7 @@ namespace AO
 						}
 					}
 
-					virtual Status filter(EntityPtr entity, Args... args) override final
+					Status filter(EntityPtr entity, Args... args) override final
 					{
 						if (currentRepetition == limit)
 						{
@@ -102,7 +61,7 @@ namespace AO
 						}
 						else
 						{
-							const Status status = this->children.front()->execute(entity, args...);
+							Status const status = this->children.front()->execute(entity, args...);
 							if (status == Status::Success || status == Status::Failure)
 							{
 								++currentRepetition;
@@ -114,6 +73,28 @@ namespace AO
 							return status;
 						}
 					}
+
+				public:
+					// Constructors
+					CountLimitDecorator(void) = delete;
+
+					CountLimitDecorator(std::size_t limit, bool allowReinitialize = true)
+						: DecoratorNode<Entity, Args...>(), limit(limit), allowReinitialize(allowReinitialize)
+					{
+						return;
+					}
+
+					CountLimitDecorator(CountLimitDecorator const &) = default;
+
+					CountLimitDecorator(CountLimitDecorator &&) = default;
+
+					// Assignment Operators
+					CountLimitDecorator &operator=(CountLimitDecorator const &) = default;
+
+					CountLimitDecorator &operator=(CountLimitDecorator &&) = default;
+
+					// Destructor
+					~CountLimitDecorator(void) = default;
 				};
 			}
 		}

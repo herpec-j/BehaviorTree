@@ -18,62 +18,50 @@ namespace AO
 				{
 				private:
 					using EntityType = typename ConditionNode<Entity, Args...>::EntityType;
+
 					using EntityPtr = typename ConditionNode<Entity, Args...>::EntityPtr;
+
 					using Parent = typename ConditionNode<Entity, Args...>::Parent;
+
 					using ParentPtr = typename ConditionNode<Entity, Args...>::ParentPtr;
+
 					using Function = std::function < Status(EntityPtr, Args...) > ;
 
+					// Attributes
+					Function function;
+
+					// Inherited Methods
+					void initialize(EntityPtr) override final
+					{
+						return;
+					}
+
+					Status decide(EntityPtr entity, Args... args) override final
+					{
+						return function(entity, args...);
+					}
+
 				public:
+					// Constructors
 					FunctionCondition(void) = delete;
 
-					FunctionCondition(const Function &function)
+					FunctionCondition(Function const &function)
 						: ConditionNode<Entity, Args...>(), function(function)
 					{
 						assert(function && "Invalid function");
 					}
 
-					FunctionCondition(const FunctionCondition &other)
-						: ConditionNode<Entity, Args...>(other), function(other.function)
-					{
-						return;
-					}
+					FunctionCondition(FunctionCondition const &) = default;
 
-					FunctionCondition(FunctionCondition &&other)
-						: ConditionNode<Entity, Args...>(std::move(other)), function(std::move(other.function))
-					{
-						return;
-					}
+					FunctionCondition(FunctionCondition &&) = default;
 
-					FunctionCondition &operator=(const FunctionCondition &other)
-					{
-						if (this != &other)
-						{
-							ConditionNode<Entity, Args...>::operator=(other);
-							function = other.function;
-						}
-						return *this;
-					}
+					// Assignment Operators
+					FunctionCondition &operator=(FunctionCondition const &) = default;
 
-					FunctionCondition &operator=(FunctionCondition &&other)
-					{
-						if (this != &other)
-						{
-							ConditionNode<Entity, Args...>::operator=(std::move(other));
-							function = std::move(other.function);
-						}
-						return *this;
-					}
+					FunctionCondition &operator=(FunctionCondition &&) = default;
 
-					virtual ~FunctionCondition(void) = default;
-
-				protected:
-					virtual Status decide(EntityPtr entity, Args... args) override final
-					{
-						return function(entity, args...);
-					}
-
-				private:
-					Function function;
+					// Destructor
+					~FunctionCondition(void) = default;
 				};
 			}
 		}

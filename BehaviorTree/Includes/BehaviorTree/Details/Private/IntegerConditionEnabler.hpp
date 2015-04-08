@@ -16,9 +16,19 @@ namespace AO
 					class IntegerConditionEnabler
 					{
 					public:
+						// Constructors
 						IntegerConditionEnabler(void) = default;
-						IntegerConditionEnabler(const IntegerConditionEnabler &other) = default;
-						IntegerConditionEnabler &operator=(const IntegerConditionEnabler &other) = default;
+
+						IntegerConditionEnabler(IntegerConditionEnabler const &) = default;
+
+						IntegerConditionEnabler(IntegerConditionEnabler &&) = default;
+						
+						// Assignment Operators
+						IntegerConditionEnabler &operator=(IntegerConditionEnabler const &) = default;
+
+						IntegerConditionEnabler &operator=(IntegerConditionEnabler &&) = default;
+
+						// Destructor
 						virtual ~IntegerConditionEnabler(void) = default;
 					};
 				}

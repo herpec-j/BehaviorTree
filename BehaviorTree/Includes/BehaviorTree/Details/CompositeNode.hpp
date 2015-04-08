@@ -21,52 +21,35 @@ namespace AO
 				{
 				protected:
 					using EntityType = typename LeafNode<Entity, Args...>::EntityType;
+
 					using EntityPtr = typename LeafNode<Entity, Args...>::EntityPtr;
+
 					using Parent = typename LeafNode<Entity, Args...>::Parent;
+
 					using ParentPtr = typename LeafNode<Entity, Args...>::ParentPtr;
+
 					using Child = LeafNode < Entity, Args... > ;
+
 					using ChildPtr = std::shared_ptr < Child > ;
+
 					using ChildrenList = std::vector < ChildPtr > ;
 
+					// Attributes
 					ChildrenList children;
 
+					// Constructors
 					CompositeNode(void) = default;
 
-					CompositeNode(const CompositeNode &other)
-						: LeafNode<Entity, Args...>(other), children(other.children)
-					{
-						return;
-					}
+					CompositeNode(CompositeNode const &) = default;
 
-					CompositeNode(CompositeNode &&other)
-						: LeafNode<Entity, Args...>(std::move(other)), children(std::move(other.children))
-					{
-						return;
-					}
+					CompositeNode(CompositeNode &&) = default;
 
-					CompositeNode &operator=(const CompositeNode &other)
-					{
-						if (this != &other)
-						{
-							LeafNode<Entity, Args...>::operator=(other);
-							children = other.children;
-						}
-						return *this;
-					}
+					// Assignment Operators
+					CompositeNode &operator=(CompositeNode const &) = default;
 
-					CompositeNode &operator=(CompositeNode &&other)
-					{
-						if (this != &other)
-						{
-							LeafNode<Entity, Args...>::operator=(std::move(other));
-							children = std::move(other.children);
-						}
-						return *this;
-					}
+					CompositeNode &operator=(CompositeNode &&) = default;
 
-					virtual void initialize(EntityPtr entity) override = 0;
-					virtual Status execute(EntityPtr entity, Args... args) override = 0;
-
+					// Virtual Methods
 					virtual void onChildAdded(ChildPtr)
 					{
 						return;
@@ -77,9 +60,15 @@ namespace AO
 						return;
 					}
 
+					virtual void initialize(EntityPtr entity) override = 0;
+
+					virtual Status execute(EntityPtr entity, Args... args) override = 0;
+
 				public:
+					// Destructor
 					virtual ~CompositeNode(void) = default;
 
+					// Virtual Methods
 					virtual ParentPtr addChild(ChildPtr child)
 					{
 						assert(child && "Invalid child");
@@ -89,6 +78,7 @@ namespace AO
 						return this->shared_from_this();
 					}
 
+					// Methods
 					ChildPtr removeChild(ChildPtr child)
 					{
 						typename ChildrenList::iterator child_it = std::find(children.begin(), children.end(), child);
