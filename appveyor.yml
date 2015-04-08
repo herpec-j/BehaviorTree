@@ -5,6 +5,7 @@ before_build:
   - mkdir Build
   - cd Build
   - cmake .. -G "Visual Studio 14"
-build:
-  project:
-    - RUN_TESTS.vcxproj
+build_script:
+  - msbuild BehaviorTree.sln /nologo /verbosity:minimal
+test_script:
+  - msbuild RUN_TESTS.vcxproj /nologo /verbosity:minimal
